@@ -22,7 +22,7 @@ Route::get('/', [MainController::class, 'home']);
 // Route::post('/register/check', [MainController::class, 'register_check']);
 Auth::routes();
 Route::get('/', [HomeController::class, 'home']);
-
+Route::get('/home', [HomeController::class, 'home']);
 // Login with social
 
 
