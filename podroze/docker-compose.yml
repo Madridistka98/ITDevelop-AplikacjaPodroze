@@ -43,6 +43,16 @@ services:
             - 'sailmysql:/var/lib/mysql'
         networks:
             - sail
+    phpmyadmin:
+        image: 'phpmyadmin/phpmyadmin'
+        networks:
+            - sail
+        depends_on: 
+            - mysql
+        environment: 
+            PMA_HOST: '${DB_CONNECTION}'
+        ports:
+            - 8080:80
     redis:
         image: 'redis:alpine'
         ports:
