@@ -13,7 +13,11 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // Musiałam wyłączyć przekierowanie, żeby móc wejść na normalną stronę główną
+        // nie było mowy o automatycznym kierowaniu użytkownika na stronę logowania.
+
+        //TODO Weryfikować zalogowanego użytkownika
+        // $this->middleware('auth');
     }
 
     /**
