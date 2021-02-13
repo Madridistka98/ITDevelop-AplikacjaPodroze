@@ -10907,3 +10907,46 @@ a.text-dark:focus {
   min-height: 100vh;
 }
 
+.main {
+  background: url(/images/background-big.jpg?944045a266286a146450768203581fd4) no-repeat center fixed;
+  background-size: cover;
+  min-height: 110vh;
+}
+
+.footer-list {
+  list-style-type: none;
+  margin: 0.9rem 0.2rem 1.8rem;
+}
+
+.footer-list li {
+  margin: 0.1rem 0;
+}
+
+.footer-list__item a {
+  color: #fff;
+}
+
+.footer-list__item a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-list__item.footer-list__item--title {
+  font-size: 1.4rem;
+}
+
+.destination__description {
+  position: absolute;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.destination__description a {
+  color: #fff;
+}
+
+.destination__description a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
