@@ -15,7 +15,7 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Route::get('/', [MainController::class, 'home']);
+// Route::get('/', [MainController::class, 'home']);
 // Route::get('/login', [MainController::class, 'login']);
 // Route::post('/login/check', [MainController::class, 'login_check']);
 // Route::get('/register', [MainController::class, 'register']);

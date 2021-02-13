@@ -2,18 +2,17 @@
 
 @section('content')
 <div class="container">
-    <div id="example"></div>
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Sign In') }}</div>
-                <div class="card-body">
+        <div class="col-md-8 bg-light rounded">
+            <div class="d-flex flex-md-row flex-column">
+                <div class="flex-column d-flex flex-grow-1 p-4">
+                    <h2>{{ __('Sign In') }}</h2>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
                         <div class="form-group row">
-                            <div class="col-md-6">
-                                <input id="email" type="email" placeholder="E-Mail" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            <div class="col-12">
+                                <input id="email" type="email" placeholder="E-Mail" class="rounded-pill form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -24,8 +23,8 @@
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-md-6">
-                                <input id="password" type="password" placeholder="Password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                            <div class="col-12">
+                                <input id="password" type="password" placeholder="Password" class="rounded-pill form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -35,50 +34,35 @@
                             </div>
                         </div>
 
-                        <!-- <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" checked name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div> -->
-
                         <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
+                            <div class="col-12">
+                                @if (Route::has('password.request'))
+                                    <a class="btn btn-link text-success" href="{{ route('password.request') }}">
+                                        {{ __('Forgot password?') }}
                                     </a>
-                                @endif
-
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Sign In') }}
-                                </button>    
+                                @endif   
                             </div>
                         </div>
+
+                        <button type="submit" class="btn btn-success rounded-pill px-5 text-white d-block ml-auto">
+                            {{ __('Sign In') }}
+                        </button> 
                     </form>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-header">{{ __('No account, less fun!') }}
-                <br>{{ __('Sign up for more') }}</div>
-                <div class="card-body">
-                    <div class="form-group row">
-                        <a class="btn btn-primary" href="{{ route('register') }}">
+
+                <div class="flex-column d-flex flex-grow-1 p-4 bg-success rounded">
+                    <div class="text-center mx-auto font-weight-bolder">{{ __('No account, less fun!') }}
+                        <br>{{ __('Sign up for more') }}
+                    </div>
+                    <div class="mx-auto">
+                        <a class="btn btn-dark px-5 my-3 rounded-pill" href="{{ route('register') }}">
                             {{ __('Sign Up') }}
                         </a>
                     </div>
-                    <div class="form-group row">
-                        {{ __('or') }}
+                    <div class="text-center mx-auto font-weight-bolder">
+                        {{ __('or') }} <br> {{ __('quick access with') }}
                     </div>
-                    <div class="form-group row">
-                        {{ __('quick access with') }}
-                    </div>
-                    <div class="form-group row">
+                    <div class="mx-auto mt-4 ">
                         <a href="{{ route('login.google') }}" class="btn btn-danger">G</a>
                         <a href="{{ route('login.facebook') }}" class="btn btn-primary">F</a>
                         <a href="" class="btn btn-outline-danger">I</a>
