@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+    <div class="row justify-content-center my-5">
+        <div class="col-md-8 shadow-sm px-0 form__register">
             <div class="card">
-                <div class="card-header rounded">
+                <div class="card-header form__register--header">
                     <h1>{{ __('Sign Up') }}</h1>
                     <p class="text-center font-weight-bold text-dark h2">Sign up for search history, planning your travel with <br> friends and more!</p>
                 </div>
@@ -69,7 +69,7 @@
                         </div>
 
                         <div class="form-group row mb-0">
-                            <div class="col-6 mx-auto">
+                            <div class="mx-auto">
                                 <button type="submit" class="btn btn-success text-white font-weight-bolder rounded-pill px-5 py-2">
                                     {{ __('Sign Up') }}
                                 </button>
