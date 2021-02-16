@@ -5,18 +5,28 @@ import PopularDestinationsData from "./PopularDestinationsSample";
 
 function PopularDestinations() {
     const [destinations, changeDestination] = useState(PopularDestinationsData);
-    let currentInRow = 0;
-    const maxInRow = 3;
 
     const PopularDestinationsComponents = destinations.map((dest) => {
-        if (currentInRow == 0) {
-            out = <div class="d-flex flex-md-row flex-column my-2"></div>;
-        }
+        return <PopularDestination {...dest} />;
     });
 
     return (
-        <div class="bg-dark d-flex flex-column rounded w-100">
-            <div class="d-flex flex-md-row flex-column my-2"></div>
+        <div className="bg-dark d-flex flex-column rounded w-100">
+            <div className="d-flex flex-grow-1 flex-md-row flex-column my-2">
+                {PopularDestinationsComponents[0]}
+                {PopularDestinationsComponents[1]}
+                {PopularDestinationsComponents[2]}
+            </div>
+            <div className="d-flex flex-grow-1 flex-md-row flex-column my-2">
+                {PopularDestinationsComponents[3]}
+                {PopularDestinationsComponents[4]}
+                {PopularDestinationsComponents[5]}
+            </div>
+            <div className="d-flex flex-grow-1 flex-md-row flex-column my-2">
+                {PopularDestinationsComponents[6]}
+                {PopularDestinationsComponents[7]}
+                {PopularDestinationsComponents[8]}
+            </div>
         </div>
     );
 }

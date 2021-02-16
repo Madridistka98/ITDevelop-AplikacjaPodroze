@@ -10935,6 +10935,16 @@ a.text-dark:focus {
   font-size: 1.4rem;
 }
 
+@media (min-width: 768px) {
+  #popular-destinations .destination {
+    width: calc(100% / 3);
+  }
+}
+
+#popular-destinations .img-fluid {
+  min-height: 100%;
+}
+
 .destination__description {
   position: absolute;
   bottom: 0;

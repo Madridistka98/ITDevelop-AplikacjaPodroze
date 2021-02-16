@@ -4,11 +4,11 @@ import ReactDOM from "react-dom";
 function PopularDestination(props) {
     const { image, name } = props;
     return (
-        <div className="flex-grow-1 mx-2 my-2 my-md-0 position-relative">
+        <div className="flex-grow-1 destination mx-2 my-2 my-md-0 position-relative">
             <img
                 className="img img-fluid rounded-left"
                 src={image}
-                alt="destination1"
+                alt={name}
             />
             <div className="destination__description d-flex w-100">
                 <div className="ml-auto mr-4 my-auto">
