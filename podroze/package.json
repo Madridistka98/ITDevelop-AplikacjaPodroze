@@ -28,6 +28,7 @@
         "sass-loader": "^8.0.0"
     },
     "dependencies": {
+        "cypress": "^6.5.0",
         "react-date-picker": "^8.0.7"
     }
 }

@@ -7,7 +7,7 @@
             <div class="d-flex flex-md-row flex-column">
                 <div class="flex-column d-flex flex-grow-1 p-4">
                     <h2>{{ __('Sign In') }}</h2>
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login') }}" data-tests="login-form">
                         @csrf
 
                         <div class="form-group row">

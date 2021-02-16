@@ -13,7 +13,12 @@ function TripSearch() {
     }
 
     return (
-        <form action="/searchtrip" method="POST" className="m-4 p-3 form-row">
+        <form
+            action="/searchtrip"
+            method="POST"
+            className="m-4 p-3 form-row"
+            data-tests="trip-search"
+        >
             <div className="col-12 col-lg-3">
                 <input
                     type="text"

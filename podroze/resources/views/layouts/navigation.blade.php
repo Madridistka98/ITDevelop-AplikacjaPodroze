@@ -27,7 +27,7 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link btn btn-success rounded-pill font-weight-bolder px-5 py-1" href="{{ route('login') }}">{{ __('Sign In') }}</a>
+                                    <a data-tests="login-page" class="nav-link btn btn-success rounded-pill font-weight-bolder px-5 py-1" href="{{ route('login') }}">{{ __('Sign In') }}</a>
                                 </li>
                             @endif
                         @else
