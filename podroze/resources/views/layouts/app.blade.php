@@ -21,11 +21,13 @@
 </head>
 <body>
     <div id="app" class="d-flex flex-column">
-        @include('layouts.navigation')
+
+        
 
             @yield('content')
 
-        @include('layouts.footer')
+          
+                
     </div>
 </body>
 </html>

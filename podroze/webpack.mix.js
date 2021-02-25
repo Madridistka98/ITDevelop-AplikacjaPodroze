@@ -1,4 +1,5 @@
-const mix = require('laravel-mix');
+const mix = require('laravel-mix'),
+        removeFlowTypes = require('laravel-mix-remove-flow-types');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +12,5 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.react('resources/js/app.jsx', 'public/js')
+mix.removeFlowTypes().react('resources/js/app.jsx', 'public/js')
     .sass('resources/sass/app.scss', 'public/css').sourceMaps().version().browserSync('localhost');

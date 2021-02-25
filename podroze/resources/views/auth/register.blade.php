@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@include('layouts.navigation')
 <div class="container">
     <div class="row justify-content-center my-5">
         <div class="col-md-8 shadow-sm px-0 form__register">
@@ -81,4 +82,6 @@
         </div>
     </div>
 </div>
+
+@include('layouts.footer')
 @endsection
