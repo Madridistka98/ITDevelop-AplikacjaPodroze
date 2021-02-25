@@ -26,6 +26,7 @@ Route::get('/home', [HomeController::class, 'home']);
 Route::get('/searchtrip', [MapController::class, 'searchtrip']);
 // Login with social
 
+Route::get('/mail', [MailController::class, 'sendEmailReminder'])->name('mail');
 
 Route::get('login/google',[LoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('login/google/callback',[LoginController::class, 'handleGoogleCallback']);
