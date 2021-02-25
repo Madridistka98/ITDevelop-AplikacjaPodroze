@@ -15,7 +15,7 @@ function TripSearch() {
     return (
         <form
             action="/searchtrip"
-            method="POST"
+            method="GET"
             className="m-4 p-3 form-row"
             data-tests="trip-search"
         >
