@@ -1,0 +1,10 @@
+./vendor/*
+./app/*
+./bootstrap/*
+./cypress/*
+./database/*
+./files_from_gitignore/*
+./public/*
+./routes/*
+./storage/*
+./node_modules/*
