@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import "./PopularDestinations.scss";
 import PopularDestination from "./PopularDestination";
 import PopularDestinationsData from "./PopularDestinationsSample";
 

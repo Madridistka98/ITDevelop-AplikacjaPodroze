@@ -10957,13 +10957,27 @@ a.text-dark:focus {
   }
 }
 
-#app {
-  min-height: 100vh;
-  font-family: "Roboto";
-}
-
 button {
   border: none;
+}
+
+.btn-secondary,
+.round {
+  border-radius: 1rem;
+}
+
+.btn {
+  font-family: "Sansation";
+  font-weight: bold;
+}
+
+.btn-link {
+  font-family: "Rowdies";
+  font-size: 0.85rem;
+}
+
+.react-date-picker .react-date-picker__button {
+  padding: 0 6px;
 }
 
 .navbar--map {
@@ -10999,34 +11013,26 @@ button {
   font-size: 1.4rem;
 }
 
-@media (min-width: 768px) {
-  #popular-destinations .destination {
-    width: calc(100% / 3);
-  }
-}
-
-#popular-destinations .img-fluid {
-  min-height: 100%;
-}
-
-.destination__description {
+.map-menu {
+  z-index: 1;
+  min-width: 25vw;
+  top: 100%;
+  left: 0px;
+  width: 100%;
+  padding: 1rem;
   position: absolute;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
 }
 
-.destination__description a {
-  color: #fff;
-}
-
-.destination__description a:hover {
-  color: #fff;
-  text-decoration: none;
+@media (max-width: screen) {
+  .map-menu {
+    min-width: 100vw;
+  }
 }
 
 .form__sign-up {
   box-shadow: -7px 0px 7px -1px rgba(0, 0, 0, 0.49);
   border-radius: 1rem;
+  font-family: "Rowdies";
   background-color: #B5DF9B;
 }
 
@@ -11053,36 +11059,10 @@ button {
 }
 
 .form__register .form__register--header {
+  font-family: "Rowdies";
   background-color: #B5DF9B;
   border-radius: 2rem;
   box-shadow: 0px 7px 2px -1px rgba(0, 0, 0, 0.49);
-}
-
-.full-height {
-  min-height: 100vh;
-}
-
-.btn-secondary,
-.round {
-  border-radius: 1rem;
-}
-
-.bg-secondary {
-  background-color: #B5DF9B;
-}
-
-.rotated-90 {
-  transform: rotate(90deg);
-}
-
-.map-menu {
-  z-index: 1;
-  min-width: 25vw;
-  top: 100%;
-  left: 0px;
-  width: 100%;
-  padding: 1rem;
-  position: absolute;
 }
 
 .login-modal .modal-body,
@@ -11100,9 +11080,28 @@ button {
   border-radius: 2rem;
 }
 
-@media (max-width: screen) {
-  .map-menu {
-    min-width: 100vw;
-  }
+#app {
+  min-height: 100vh;
+  font-family: "Roboto";
+}
+
+nav,
+footer,
+.destination,
+.destinations,
+.main h2 {
+  font-family: "Sansation";
+}
+
+.full-height {
+  min-height: 100vh;
+}
+
+.bg-secondary {
+  background-color: #B5DF9B;
+}
+
+.rotated-90 {
+  transform: rotate(90deg);
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "./PopularDestination.scss";
 
 function PopularDestination(props) {
     const { image, name } = props;

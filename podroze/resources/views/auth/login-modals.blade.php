@@ -79,12 +79,12 @@
                                                     <div class="text-center mx-auto font-weight-bolder">
                                                         {{ __('or') }} <br> {{ __('quick access with') }}
                                                     </div>
-                                                    <div class="mx-auto mt-4 ">
-                                                        <a href="{{ route('login.google') }}" class="btn btn-danger">G</a>
-                                                        <a href="{{ route('login.facebook') }}" class="btn btn-primary">F</a>
-                                                        <a href="" class="btn btn-outline-danger">I</a>
-                                                        <a href="{{ route('login.twitter') }}" class="btn btn-outline-primary">T</a>
-                                                        <a href="" class="btn btn-dark">A</a>
+                                                    <div class="mx-auto mt-4 d-flex flex-row ">
+                                                        <a href="{{ route('login.google') }}" class="img img-fluid flex-grow-1"><img src="./static/images/icons/google.png" alt="google-login"></a>
+                                                        <a href="{{ route('login.facebook') }}" class="img img-fluid flex-grow-1"><img src="./static/images/icons/facebook.png" alt="facebook-login"></a>
+                                                        <a href="" class="img img-fluid flex-grow-1"><img src="./static/images/icons/instagram.png" alt="instagram-login"></a>
+                                                        <a href="{{ route('login.twitter') }}" class="img img-fluid flex-grow-1"><img src="./static/images/icons/twitter.png" alt="twitter-login"></a>
+                                                        <a href="" class="img img-fluid flex-grow-1"><img src="./static/images/icons/apple.png" alt="apple-login"></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,7 +104,7 @@
                                             <div class="card">
                                                 <div class="card-header form__register--header">
                                                     <h1>{{ __('Sign Up') }}</h1>
-                                                    <p class="text-center font-weight-bold text-dark h2">Sign up for search history, planning your travel with <br> friends and more!</p>
+                                                    <p class="text-center font-weight-bold text-dark h3">Sign up for search history, planning your travel with <br> friends and more!</p>
                                                 </div>
 
                                                 <div class="card-body">
