@@ -1,14 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, type Node } from "react";
 import ReactDOM from "react-dom";
 import "./PopularDestinations.scss";
 import PopularDestination from "./PopularDestination";
 import PopularDestinationsData from "./PopularDestinationsSample";
+// @flow
+type Destination = {
+    name: string,
+    image: string,
+};
 
-function PopularDestinations() {
-    const [destinations, changeDestination] = useState(PopularDestinationsData);
+type ChangeDestFunc = (Array<Destination>) => void;
+
+function PopularDestinations(): Node {
+    const [
+        destinations: Array<Destination>,
+        changeDestination: ChangeDestFunc,
+    ] = useState(PopularDestinationsData);
 
     const PopularDestinationsComponents = destinations.map((dest) => {
-        return <PopularDestination {...dest} />;
+        return <PopularDestination key={dest.name} {...dest} />;
     });
 
     return (

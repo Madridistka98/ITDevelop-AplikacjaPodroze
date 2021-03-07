@@ -1,10 +1,22 @@
-import React, { useState } from "react";
+// @flow
+import React, { useState, type Node } from "react";
 import ReactDOM from "react-dom";
 import DatePicker from "react-date-picker";
 
-function TripSearch() {
-    const [travel, changeTravel] = useState({ start: "", destination: "" });
-    const [date, changeDate] = useState(new Date());
+type TravelPoints = {
+    start: string,
+    destination: string,
+};
+
+type ChangeTravelPoints = (TravelPoints) => void;
+type ChangeDateFunc = (Date) => void;
+
+function TripSearch(): Node {
+    const [travel: TravelPoints, changeTravel: ChangeTravelPoints] = useState({
+        start: "",
+        destination: "",
+    });
+    const [date: Date, changeDate: ChangeDateFunc] = useState(new Date());
 
     function swapTravelPoints(e) {
         e.preventDefault();
