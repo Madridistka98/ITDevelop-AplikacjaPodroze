@@ -2,7 +2,7 @@
     <div class="row flex-grow-1">
         <div class="d-flex flex-column col-md-3 col-12 bg-dark ">
             <a href="{{ url('/') }}" class="btn btn-secondary w-100">
-                <img src="./static/images/Logo_dinozaur.png" alt="logo_dinozaur" class="img img-fluid w-25">
+                <img src="./static/images/dino_mapa.png" alt="logo_dinozaur" class="img img-fluid w-25">
             </a>
             <div class="d-flex flex-row  justify-content-around mx-2 my-4">
                 <a href="#" class="btn btn-secondary m-2 p-1">
