@@ -96,7 +96,3 @@ function TripSearch(): Node {
 }
 
 export default TripSearch;
-
-if (document.getElementById("trip-search")) {
-    ReactDOM.render(<TripSearch />, document.getElementById("trip-search"));
-}

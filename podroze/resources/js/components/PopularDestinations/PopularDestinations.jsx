@@ -43,10 +43,3 @@ function PopularDestinations(): Node {
 }
 
 export default PopularDestinations;
-
-if (document.getElementById("popular-destinations")) {
-    ReactDOM.render(
-        <PopularDestinations />,
-        document.getElementById("popular-destinations")
-    );
-}
