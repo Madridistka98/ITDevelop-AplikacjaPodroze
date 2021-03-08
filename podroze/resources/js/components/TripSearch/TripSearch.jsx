@@ -45,6 +45,7 @@ function TripSearch(): Node {
             </div>
             <a
                 href="#"
+                data-testid="tripsearch-swap"
                 onClick={swapTravelPoints}
                 className="my-3 my-lg-auto mx-auto text-success"
             >
