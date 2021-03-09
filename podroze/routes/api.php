@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\DestinationController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('web') -> group(base_path('routes/web.php'));
 
-Route::get('destinations','DestinationController@index');
+Route::get('/destinations',[DestinationController::class,'index']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

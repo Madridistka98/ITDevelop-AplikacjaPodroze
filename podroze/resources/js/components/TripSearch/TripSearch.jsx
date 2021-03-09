@@ -1,6 +1,7 @@
 // @flow
-import React, { useState, type Node } from "react";
+import React, { useState, useEffect, type Node } from "react";
 import DatePicker from "react-date-picker";
+import Axios from "axios";
 
 type TravelPoints = {
     start: string,
@@ -15,6 +16,7 @@ function TripSearch(): Node {
         start: "",
         destination: "",
     });
+    const [points, changePoints] = useState([]);
     const [date: Date, changeDate: ChangeDateFunc] = useState(new Date());
 
     function swapTravelPoints(e) {
@@ -23,6 +25,17 @@ function TripSearch(): Node {
         changeTravel({ start: destination, destination: start });
     }
 
+    useEffect(() => {
+        Axios.get("/api/destinations")
+            .then((res) => {
+                console.log(res);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
+    }, [travel]);
+
     return (
         <form
             action="/searchtrip"
@@ -30,17 +43,31 @@ function TripSearch(): Node {
             className="m-4 p-3 form-row"
             data-tests="trip-search"
         >
-            <div className="col-12 col-lg-3">
+            <div className="col-12 col-lg-3 dropdown">
                 <input
+                    id="startDrop"
                     type="text"
                     className="form-control"
                     placeholder="Start"
                     name="start"
                     value={travel.start}
+                    aria-haspopup="true"
+                    aria-expanded="false"
                     onChange={(e) => {
                         changeTravel({ ...travel, start: e.target.value });
                     }}
                 />
+                <div className="dropdown-menu" aria-labelledby="startDrop">
+                    <a className="dropdown-item" href="#">
+                        Regular link
+                    </a>
+                    <a className="dropdown-item disabled" href="#">
+                        Disabled link
+                    </a>
+                    <a className="dropdown-item" href="#">
+                        Another link
+                    </a>
+                </div>
             </div>
             <a
                 href="#"
