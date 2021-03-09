@@ -5,20 +5,20 @@
  */
 
 // require("./bootstrap");
-import "bootstrap";
+import * as Bootstrap from "bootstrap";
 /**
  * Next, we will create a fresh React component instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-// require("./components/TripSearch/TripSearch");
-// require("./components/PopularDestinations/PopularDestinations");
 import React from "react";
 import ReactDOM from "react-dom";
 import TripSearch from "./components/TripSearch/TripSearch";
 import PopularDestinations from "./components/PopularDestinations/PopularDestinations";
 
+window.bootstrap = Bootstrap;
+//let modal = new bootstrap.Modal(document.getElementById("loginModal"));
 if (document.getElementById("trip-search")) {
     ReactDOM.render(<TripSearch />, document.getElementById("trip-search"));
 }

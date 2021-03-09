@@ -137,25 +137,25 @@
 
                                                         <div class="form-group row">
                                                             <div class="col-12">
-                                                                <input id="email" type="email" placeholder="Email" class="form-control rounded-pill @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                                                <input id="registerEmail" type="email" placeholder="Email" class="form-control rounded-pill @if($errors->register->has("email")) is-invalid @endif" name="email" value="{{ old('email') }}" required autocomplete="email">
 
-                                                                @error('email')
+                                                                @if($errors->register->has("email"))
                                                                     <span class="invalid-feedback" role="alert">
-                                                                        <strong>{{ $message }}</strong>
+                                                                        <strong>{{ $errors->register->first('email') }}</strong>
                                                                     </span>
-                                                                @enderror
+                                                                @endif
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
                                                             <div class="col-12">
-                                                                <input id="password" type="password" placeholder="Password" class="form-control rounded-pill @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                                                <input id="registerPassword" type="password" placeholder="Password" class="form-control rounded-pill @if($errors->register->has("password")) is-invalid @endif" name="password" required autocomplete="new-password">
 
-                                                                @error('password')
+                                                                @if($errors->register->has("password"))
                                                                     <span class="invalid-feedback" role="alert">
-                                                                        <strong>{{ $message }}</strong>
+                                                                        <strong>{{  $errors->register->first('password') }}</strong>
                                                                     </span>
-                                                                @enderror
+                                                                @endif
                                                             </div>
                                                         </div>
 
@@ -241,3 +241,14 @@
                             </li> --}}
                         @endguest
                     </ul>
+
+                    @if($errors->has('email') || $errors->has("password"))
+                    <script>
+                        window.onload = function(){ new bootstrap.Modal(document.getElementById("loginModal")).toggle(); };
+                    </script>
+                    @endif
+                    @if($errors->has('name') || $errors->has("surname") || $errors->register->has("email") || $errors->register->has("password"))
+                    <script>
+                        window.onload = function(){ new bootstrap.Modal(document.getElementById("signupModal")).toggle() };
+                    </script>'
+                    @endif'

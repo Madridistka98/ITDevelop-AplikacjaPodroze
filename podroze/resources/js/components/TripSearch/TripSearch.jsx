@@ -1,6 +1,5 @@
 // @flow
 import React, { useState, type Node } from "react";
-import ReactDOM from "react-dom";
 import DatePicker from "react-date-picker";
 
 type TravelPoints = {
