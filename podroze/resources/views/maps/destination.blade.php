@@ -64,7 +64,17 @@
             
         </div>
         <div class="col-md-7 col-12" id="map">
-
-        </div>
+            <!-- <gmap-map
+                :center="{lat:10,lng:10}"
+                :zoom="7"
+            >
+                <gmap-marker
+                    :position="{lat:10,lng:10} "                  
+                    :clckable="true"
+                    :draggable="false"
+                >
+                </gmap-marker>
+            </gmap-map>
+        </div> -->
     </div>
 </div>
