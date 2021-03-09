@@ -1,0 +1,11 @@
+#popular-destinations {
+    @media (min-width: 768px) {
+        .destination {
+            width: calc(100% / 3);
+        }
+    }
+
+    .img-fluid {
+        min-height: 100%;
+    }
+}

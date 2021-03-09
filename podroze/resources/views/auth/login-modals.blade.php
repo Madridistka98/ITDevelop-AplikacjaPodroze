@@ -79,12 +79,12 @@
                                                     <div class="text-center mx-auto font-weight-bolder">
                                                         {{ __('or') }} <br> {{ __('quick access with') }}
                                                     </div>
-                                                    <div class="mx-auto mt-4 ">
-                                                        <a href="{{ route('login.google') }}" class="btn btn-danger">G</a>
-                                                        <a href="{{ route('login.facebook') }}" class="btn btn-primary">F</a>
-                                                        <a href="" class="btn btn-outline-danger">I</a>
-                                                        <a href="{{ route('login.twitter') }}" class="btn btn-outline-primary">T</a>
-                                                        <a href="" class="btn btn-dark">A</a>
+                                                    <div class="mx-auto mt-4 d-flex flex-row ">
+                                                        <a href="{{ route('login.google') }}" class="img img-fluid flex-grow-1"><img src="./static/images/icons/google.png" alt="google-login"></a>
+                                                        <a href="{{ route('login.facebook') }}" class="img img-fluid flex-grow-1"><img src="./static/images/icons/facebook.png" alt="facebook-login"></a>
+                                                        <a href="" class="img img-fluid flex-grow-1"><img src="./static/images/icons/instagram.png" alt="instagram-login"></a>
+                                                        <a href="{{ route('login.twitter') }}" class="img img-fluid flex-grow-1"><img src="./static/images/icons/twitter.png" alt="twitter-login"></a>
+                                                        <a href="" class="img img-fluid flex-grow-1"><img src="./static/images/icons/apple.png" alt="apple-login"></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,7 +104,7 @@
                                             <div class="card">
                                                 <div class="card-header form__register--header">
                                                     <h1>{{ __('Sign Up') }}</h1>
-                                                    <p class="text-center font-weight-bold text-dark h2">Sign up for search history, planning your travel with <br> friends and more!</p>
+                                                    <p class="text-center font-weight-bold text-dark h3">Sign up for search history, planning your travel with <br> friends and more!</p>
                                                 </div>
 
                                                 <div class="card-body">
@@ -137,25 +137,25 @@
 
                                                         <div class="form-group row">
                                                             <div class="col-12">
-                                                                <input id="email" type="email" placeholder="Email" class="form-control rounded-pill @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                                                <input id="registerEmail" type="email" placeholder="Email" class="form-control rounded-pill @if($errors->register->has("email")) is-invalid @endif" name="email" value="{{ old('email') }}" required autocomplete="email">
 
-                                                                @error('email')
+                                                                @if($errors->register->has("email"))
                                                                     <span class="invalid-feedback" role="alert">
-                                                                        <strong>{{ $message }}</strong>
+                                                                        <strong>{{ $errors->register->first('email') }}</strong>
                                                                     </span>
-                                                                @enderror
+                                                                @endif
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
                                                             <div class="col-12">
-                                                                <input id="password" type="password" placeholder="Password" class="form-control rounded-pill @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                                                <input id="registerPassword" type="password" placeholder="Password" class="form-control rounded-pill @if($errors->register->has("password")) is-invalid @endif" name="password" required autocomplete="new-password">
 
-                                                                @error('password')
+                                                                @if($errors->register->has("password"))
                                                                     <span class="invalid-feedback" role="alert">
-                                                                        <strong>{{ $message }}</strong>
+                                                                        <strong>{{  $errors->register->first('password') }}</strong>
                                                                     </span>
-                                                                @enderror
+                                                                @endif
                                                             </div>
                                                         </div>
 
@@ -241,3 +241,14 @@
                             </li> --}}
                         @endguest
                     </ul>
+
+                    @if($errors->has('email') || $errors->has("password"))
+                    <script>
+                        window.onload = function(){ new bootstrap.Modal(document.getElementById("loginModal")).toggle(); };
+                    </script>
+                    @endif
+                    @if($errors->has('name') || $errors->has("surname") || $errors->register->has("email") || $errors->register->has("password"))
+                    <script>
+                        window.onload = function(){ new bootstrap.Modal(document.getElementById("signupModal")).toggle() };
+                    </script>'
+                    @endif'

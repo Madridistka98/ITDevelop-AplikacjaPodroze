@@ -1,16 +1,40 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
+// @flow
+import React, { useState, useEffect, type Node } from "react";
 import DatePicker from "react-date-picker";
+import Axios from "axios";
 
-function TripSearch() {
-    const [travel, changeTravel] = useState({ start: "", destination: "" });
-    const [date, changeDate] = useState(new Date());
+type TravelPoints = {
+    start: string,
+    destination: string,
+};
+
+type ChangeTravelPoints = (TravelPoints) => void;
+type ChangeDateFunc = (Date) => void;
+
+function TripSearch(): Node {
+    const [travel: TravelPoints, changeTravel: ChangeTravelPoints] = useState({
+        start: "",
+        destination: "",
+    });
+    const [points, changePoints] = useState([]);
+    const [date: Date, changeDate: ChangeDateFunc] = useState(new Date());
 
     function swapTravelPoints(e) {
         e.preventDefault();
         const { start, destination } = travel;
         changeTravel({ start: destination, destination: start });
     }
+
+    useEffect(() => {
+        Axios.get("/api/destinations")
+            .then((res) => {
+                console.log(res);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
+    }, [travel]);
 
     return (
         <form
@@ -19,20 +43,35 @@ function TripSearch() {
             className="m-4 p-3 form-row"
             data-tests="trip-search"
         >
-            <div className="col-12 col-lg-3">
+            <div className="col-12 col-lg-3 dropdown">
                 <input
+                    id="startDrop"
                     type="text"
                     className="form-control"
                     placeholder="Start"
                     name="start"
                     value={travel.start}
+                    aria-haspopup="true"
+                    aria-expanded="false"
                     onChange={(e) => {
                         changeTravel({ ...travel, start: e.target.value });
                     }}
                 />
+                <div className="dropdown-menu" aria-labelledby="startDrop">
+                    <a className="dropdown-item" href="#">
+                        Regular link
+                    </a>
+                    <a className="dropdown-item disabled" href="#">
+                        Disabled link
+                    </a>
+                    <a className="dropdown-item" href="#">
+                        Another link
+                    </a>
+                </div>
             </div>
             <a
                 href="#"
+                data-testid="tripsearch-swap"
                 onClick={swapTravelPoints}
                 className="my-3 my-lg-auto mx-auto text-success"
             >
@@ -84,7 +123,3 @@ function TripSearch() {
 }
 
 export default TripSearch;
-
-if (document.getElementById("trip-search")) {
-    ReactDOM.render(<TripSearch />, document.getElementById("trip-search"));
-}

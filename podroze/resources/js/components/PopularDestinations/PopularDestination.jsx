@@ -1,7 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import * as React from "react";
+import "./PopularDestination.scss";
+// @flow
+type Props = {
+    image: string,
+    name: string,
+};
 
-function PopularDestination(props) {
+function PopularDestination(props: Props): Node {
     const { image, name } = props;
     return (
         <div className="flex-grow-1 destination mx-2 my-2 my-md-0 position-relative">
