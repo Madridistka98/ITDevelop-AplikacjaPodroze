@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class MailController extends Controller
 {
@@ -17,4 +19,4 @@ class MailController extends Controller
         });
     }
 }
-}
+

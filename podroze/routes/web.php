@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{HomeController, MapController};
+use App\Http\Controllers\{HomeController, MapController, MailController};
 use Laravel\Socialite\Facades\Socialite;
 /*
 |--------------------------------------------------------------------------
