@@ -18,4 +18,16 @@ class DestinationController extends Controller
         return $destinationsJson;
 
     }
+
+    public function getDestinations(string $start, string $destination)
+    {
+        if($start == "" || $destination == "")
+        {
+            return "noResults";
+        }
+        $mapStart = Destination::select("ID", "city",  "latitude", "longitude")->where("city", "=", $start)->get();
+        $mapDestination = Destination::select("ID", "city",  "latitude", "longitude")->where("city", "=", $destination)->get();
+        $destinationsJson = $mapStart->concat($mapDestination)->toJson();
+        return $destinationsJson;
+    }
 }

@@ -1,9 +1,41 @@
-import React, { useState, type Node } from "react";
-import Map from "./Map/Map";
+import React, { useState, useEffect, type Node } from "react";
+import Map, { type MapDestination } from "./Map/Map";
+import Axios from "axios";
 import queryString from "query-string";
 // @flow
 const parsed = queryString.parse(location.search);
 function TripPlanner(): Node {
+    const [start, changeStart] = useState(parsed.start);
+    const [destination, changeDestination] = useState(parsed.destination);
+    const [
+        locations: Array<MapDestination>,
+        changeLocations: (Array<MapDestination>) => void,
+    ] = useState();
+
+    function swapTravelPoints(e) {
+        e.preventDefault();
+        const [tempStart, tempDestination] = [start, destination];
+        changeStart(tempDestination);
+        changeDestination(tempStart);
+    }
+
+    async function getMapDestinations() {
+        const startPoint = start.includes(",") ? start.split(",")[0] : start;
+        const destPoint = destination.includes(",")
+            ? destination.split(",")[0]
+            : destination;
+        const response = await Axios.get(
+            `/api/map-destinations/${startPoint}-${destPoint}`
+        );
+        changeLocations(response.data);
+    }
+
+    useEffect(() => {
+        getMapDestinations();
+    }, [start, destination]);
+
+    let hasLocations = typeof locations != "undefined" ? true : false;
+
     return (
         <div className="row flex-grow-1">
             <div className="d-flex flex-column col-md-3 col-12 bg-dark ">
@@ -56,7 +88,8 @@ function TripPlanner(): Node {
                                 placeholder="Start"
                                 className="form-control"
                                 id="startPoint"
-                                value={parsed.start}
+                                value={start}
+                                onChange={changeStart}
                             />
                         </div>
                         <div className="form-group d-flex flex-direction-row">
@@ -70,6 +103,7 @@ function TripPlanner(): Node {
                             <a
                                 href="#"
                                 className="rotated-90 my-3 my-lg-auto ml-auto text-success"
+                                onClick={swapTravelPoints}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +126,8 @@ function TripPlanner(): Node {
                                 placeholder="Destination"
                                 className="form-control"
                                 id="destinationPoint"
-                                value={parsed.destination}
+                                value={destination}
+                                onChange={changeDestination}
                             />
                         </div>
                     </form>
@@ -115,7 +150,7 @@ function TripPlanner(): Node {
                         </div>
                         @endguest */}
             </div>
-            <Map />
+            {hasLocations ? <Map {...locations} /> : <></>}
         </div>
     );
 }
