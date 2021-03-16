@@ -13,15 +13,18 @@ type MapDestination = {
     longitude: number,
 };
 
-type Props = Array<MapDestination>;
+type Props = {
+    locations: Array<MapDestination>,
+    transport: string,
+};
 
 function Map(props: Props): Node {
     const [hMap, changeMap] = useState({});
     const [routes, changeRoutes] = useState();
     const mapContainer = useRef(null);
-    const start = props[0];
-    const destination = props[1];
-
+    const start = props.locations[0];
+    const destination = props.locations[1];
+    const transport = props.transport;
     function handleMapViewChange(e) {
         if (e.newValue && e.newValue.lookAt && hMap.map) {
             const lookAt = e.newValue.lookAt;
@@ -38,7 +41,7 @@ function Map(props: Props): Node {
     function makeRoute(map) {
         const routingParameters = {
             routingMode: "fast",
-            transportMode: "car",
+            transportMode: transport,
             // The start point of the route:
             origin: `${start.latitude},${start.longitude}`,
             // The end point of the route:

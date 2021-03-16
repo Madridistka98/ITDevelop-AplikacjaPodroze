@@ -8,6 +8,7 @@ const parsed = queryString.parse(location.search);
 function TripPlanner(): Node {
     const [start, changeStart] = useState(parsed.start);
     const [destination, changeDestination] = useState(parsed.destination);
+    const [transport, changeTransport] = useState("car");
     const [
         locations: Array<MapDestination>,
         changeLocations: (Array<MapDestination>) => void,
@@ -76,28 +77,76 @@ function TripPlanner(): Node {
                     />
                 </a>
                 <div className="d-flex flex-row  justify-content-around mx-2 my-4">
-                    <a href="#" className="btn btn-secondary m-2 p-1">
+                    <a
+                        href="#"
+                        data-toggle="button"
+                        aria-pressed={transport == "bus" ? " true" : "false"}
+                        className={
+                            "btn btn-secondary m-2 p-1 " +
+                            (transport == "bus" ? " active" : "")
+                        }
+                        onClick={() => {
+                            changeTransport("bus");
+                        }}
+                    >
                         <img
                             className="img img-fluid p-1"
                             src="./static/images/icons/samolot_1.png"
                             alt="samolot"
                         />
                     </a>
-                    <a href="#" className="btn btn-secondary m-2 p-1">
+                    <a
+                        href="#"
+                        data-toggle="button"
+                        aria-pressed={
+                            transport == "bicycle" ? " true" : "false"
+                        }
+                        className={
+                            "btn btn-secondary m-2 p-1 " +
+                            (transport == "bicycle" ? " active" : "")
+                        }
+                        onClick={() => {
+                            changeTransport("bicycle");
+                        }}
+                    >
                         <img
                             className="img img-fluid p-1"
                             src="./static/images/icons/rower_1.png"
                             alt="rower"
                         />
                     </a>
-                    <a href="#" className="btn btn-secondary m-2 p-1">
+                    <a
+                        href="#"
+                        data-toggle="button"
+                        aria-pressed={transport == "car" ? " true" : "false"}
+                        className={
+                            "btn btn-secondary m-2 p-1 " +
+                            (transport == "car" ? " active" : "")
+                        }
+                        onClick={() => {
+                            changeTransport("car");
+                        }}
+                    >
                         <img
                             className="img img-fluid p-1"
                             src="./static/images/icons/auto_1.png"
                             alt="auto"
                         />
                     </a>
-                    <a href="#" className="btn btn-secondary m-2 p-1">
+                    <a
+                        href="#"
+                        data-toggle="button"
+                        aria-pressed={
+                            transport == "pedestrian" ? " true" : "false"
+                        }
+                        className={
+                            "btn btn-secondary m-2 p-1 " +
+                            (transport == "pedestrian" ? " active" : "")
+                        }
+                        onClick={() => {
+                            changeTransport("pedestrian");
+                        }}
+                    >
                         <img
                             className="img img-fluid p-1"
                             src="./static/images/icons/train_1.png"
@@ -178,7 +227,11 @@ function TripPlanner(): Node {
 
                 {calendar}
             </div>
-            {hasLocations ? <Map {...locations} /> : <></>}
+            {hasLocations ? (
+                <Map locations={[...locations]} transport={transport} />
+            ) : (
+                ""
+            )}
         </div>
     );
 }
