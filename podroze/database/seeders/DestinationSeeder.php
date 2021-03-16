@@ -41,5 +41,23 @@ class DestinationSeeder extends Seeder
             'created_at'=>date('Y-m-d H:i:s'),
             'updated_at'=>date('Y-m-d H:i:s'),
         ]);
+        DB::table('destinations')->insert([
+            'city'=>'Opole',
+            'country'=>'Poland',
+            'name'=>'Opole',
+            'latitude'=>50.671541378396405, 
+            'longitude'=>17.924479983623314,
+            'created_at'=>date('Y-m-d H:i:s'),
+            'updated_at'=>date('Y-m-d H:i:s'),
+        ]);
+         DB::table('destinations')->insert([
+            'city'=>'Warsaw',
+            'country'=>'Poland',
+            'name'=>'Warsaw',
+            'latitude'=>52.2299111837358, 
+            'longitude'=>21.008316370021184, 
+            'created_at'=>date('Y-m-d H:i:s'),
+            'updated_at'=>date('Y-m-d H:i:s'),
+        ]);
     }
 }

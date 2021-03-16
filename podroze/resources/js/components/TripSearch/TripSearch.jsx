@@ -1,40 +1,25 @@
 // @flow
-import React, { useState, useEffect, type Node } from "react";
+import React, { useState, type Node } from "react";
 import DatePicker from "react-date-picker";
-import Axios from "axios";
+import DropDown from "./DropDown";
 
-type TravelPoints = {
-    start: string,
-    destination: string,
-};
-
-type ChangeTravelPoints = (TravelPoints) => void;
+type ChangeTravelPoints = (string) => void;
 type ChangeDateFunc = (Date) => void;
 
 function TripSearch(): Node {
-    const [travel: TravelPoints, changeTravel: ChangeTravelPoints] = useState({
-        start: "",
-        destination: "",
-    });
-    const [points, changePoints] = useState([]);
+    const [start: string, changeStart: ChangeTravelPoints] = useState("");
+    const [
+        destination: string,
+        changeDestination: ChangeTravelPoints,
+    ] = useState("");
     const [date: Date, changeDate: ChangeDateFunc] = useState(new Date());
 
     function swapTravelPoints(e) {
         e.preventDefault();
-        const { start, destination } = travel;
-        changeTravel({ start: destination, destination: start });
+        const [tempStart, tempDestination] = [start, destination];
+        changeStart(tempDestination);
+        changeDestination(tempStart);
     }
-
-    useEffect(() => {
-        Axios.get("/api/destinations")
-            .then((res) => {
-                console.log(res);
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            });
-    }, [travel]);
 
     return (
         <form
@@ -43,32 +28,8 @@ function TripSearch(): Node {
             className="m-4 p-3 form-row"
             data-tests="trip-search"
         >
-            <div className="col-12 col-lg-3 dropdown">
-                <input
-                    id="startDrop"
-                    type="text"
-                    className="form-control"
-                    placeholder="Start"
-                    name="start"
-                    value={travel.start}
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                    onChange={(e) => {
-                        changeTravel({ ...travel, start: e.target.value });
-                    }}
-                />
-                <div className="dropdown-menu" aria-labelledby="startDrop">
-                    <a className="dropdown-item" href="#">
-                        Regular link
-                    </a>
-                    <a className="dropdown-item disabled" href="#">
-                        Disabled link
-                    </a>
-                    <a className="dropdown-item" href="#">
-                        Another link
-                    </a>
-                </div>
-            </div>
+            <DropDown name="start" point={start} changePoint={changeStart} />
+
             <a
                 href="#"
                 data-testid="tripsearch-swap"
@@ -89,21 +50,11 @@ function TripSearch(): Node {
                     />
                 </svg>
             </a>
-            <div className="col-12 col-lg-3 mb-3 mb-lg-0">
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Destination"
-                    name="destination"
-                    value={travel.destination}
-                    onChange={(e) => {
-                        changeTravel({
-                            ...travel,
-                            destination: e.target.value,
-                        });
-                    }}
-                />
-            </div>
+            <DropDown
+                name="destination"
+                point={destination}
+                changePoint={changeDestination}
+            />
             <div className="col-12 col-lg-3">
                 <DatePicker
                     onChange={changeDate}

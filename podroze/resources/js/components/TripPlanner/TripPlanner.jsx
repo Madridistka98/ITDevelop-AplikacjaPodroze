@@ -1,9 +1,70 @@
-import React, { useState, type Node } from "react";
-import Map from "./Map/Map";
+import React, { useState, useEffect, type Node } from "react";
+import Map, { type MapDestination } from "./Map/Map";
+import Axios from "axios";
 import queryString from "query-string";
+import DropDown from "./../TripSearch/DropDown";
 // @flow
 const parsed = queryString.parse(location.search);
 function TripPlanner(): Node {
+    const [start, changeStart] = useState(parsed.start);
+    const [destination, changeDestination] = useState(parsed.destination);
+    const [
+        locations: Array<MapDestination>,
+        changeLocations: (Array<MapDestination>) => void,
+    ] = useState();
+
+    const calendar =
+        document.getElementById("profileModal") == null ? null : (
+            <div className="d-flex flex-column">
+                <a
+                    href="#"
+                    className="btn btn-secondary rounded-pill mx-auto my-4 px-5 w-100 "
+                >
+                    Save in the calendar
+                </a>
+                <a
+                    href="#"
+                    className="btn btn-secondary rounded-pill mx-auto my-4 px-5 w-100 "
+                >
+                    Add a friend
+                </a>
+            </div>
+        );
+
+    function swapTravelPoints(e) {
+        e.preventDefault();
+        const [tempStart, tempDestination] = [start, destination];
+        changeStart(tempDestination);
+        changeDestination(tempStart);
+    }
+
+    function getMapDestinations() {
+        let delay = setTimeout(async () => {
+            const startPoint = start.includes(",")
+                ? start.split(",")[0]
+                : start;
+            const destPoint = destination.includes(",")
+                ? destination.split(",")[0]
+                : destination;
+            if (startPoint && destPoint) {
+                const response = await Axios.get(
+                    `/api/map-destinations/${startPoint}-${destPoint}`
+                );
+                if (response.data != "") changeLocations(response.data);
+            }
+        }, 500);
+        return delay;
+    }
+
+    useEffect(() => {
+        let delay = getMapDestinations();
+        return () => {
+            clearTimeout(delay);
+        };
+    }, [start, destination]);
+
+    let hasLocations = typeof locations != "undefined" ? true : false;
+
     return (
         <div className="row flex-grow-1">
             <div className="d-flex flex-column col-md-3 col-12 bg-dark ">
@@ -50,15 +111,12 @@ function TripPlanner(): Node {
                         method="GET"
                         className="d-flex flex-column"
                     >
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                placeholder="Start"
-                                className="form-control"
-                                id="startPoint"
-                                value={parsed.start}
-                            />
-                        </div>
+                        <DropDown
+                            point={start}
+                            name="start"
+                            changePoint={changeStart}
+                            isGroup={true}
+                        />
                         <div className="form-group d-flex flex-direction-row">
                             <a href="#" className="mr-auto my-3 my-lg-auto ">
                                 <img
@@ -70,6 +128,7 @@ function TripPlanner(): Node {
                             <a
                                 href="#"
                                 className="rotated-90 my-3 my-lg-auto ml-auto text-success"
+                                onClick={swapTravelPoints}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -86,24 +145,26 @@ function TripPlanner(): Node {
                                 </svg>
                             </a>
                         </div>
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                placeholder="Destination"
-                                className="form-control"
-                                id="destinationPoint"
-                                value={parsed.destination}
-                            />
-                        </div>
+                        <DropDown
+                            point={destination}
+                            name="destination"
+                            changePoint={changeDestination}
+                            isGroup={true}
+                        />
                     </form>
                 </div>
 
-                <a
+                {/* <a
                     href="#"
                     className="btn btn-success rounded-pill mx-auto my-4 px-5"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        changeStart(start);
+                        changeDestination(destination);
+                    }}
                 >
                     Start
-                </a>
+                </a> */}
 
                 {/* @guest
                             @if (Route::has('login'))
@@ -114,8 +175,10 @@ function TripPlanner(): Node {
                             <a href="#" className="btn btn-secondary rounded-pill mx-auto my-4 px-5 w-100 ">Add a friend</a>
                         </div>
                         @endguest */}
+
+                {calendar}
             </div>
-            <Map />
+            {hasLocations ? <Map {...locations} /> : <></>}
         </div>
     );
 }
