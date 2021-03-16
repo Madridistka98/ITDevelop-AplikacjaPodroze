@@ -16,7 +16,11 @@ use App\Http\Controllers\DestinationController;
 
 Route::middleware('web') -> group(base_path('routes/web.php'));
 
+
+
+
 Route::get('/destinations/{text}',[DestinationController::class,'getNames']);
+
 Route::get('/map-destinations/{start}-{destination}',[DestinationController::class,'getDestinations']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

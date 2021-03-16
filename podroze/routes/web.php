@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{HomeController, MapController, MailController};
+use App\Http\Controllers\{HomeController, MapController, MailController,DbTest};
 use Laravel\Socialite\Facades\Socialite;
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +27,11 @@ Route::get('/searchtrip', [MapController::class, 'searchtrip']);
 // Login with social
 
 Route::get('/mail', [MailController::class, 'sendEmailReminder'])->name('mail');
+
+
+Route::get('/destinations',[DbTest::class,'index']);
+
+//Route::get('/destinations',[DestinationController::class,'getDestinations']);
 
 Route::get('login/google',[LoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('login/google/callback',[LoginController::class, 'handleGoogleCallback']);
