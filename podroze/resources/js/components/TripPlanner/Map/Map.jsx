@@ -47,15 +47,11 @@ function Map(props: Props): Node {
             return: "polyline",
         };
 
-        console.log(routingParameters);
-
         // Define a callback function to process the routing response:
         const onResult = function (result) {
             // ensure that at least one route was found
-            console.log(result);
             routes.removeAll();
             if (result.routes.length) {
-                console.log("sections");
                 result.routes[0].sections.forEach((section) => {
                     // Create a linestring to use as a point source for the route line
                     const linestring = H.geo.LineString.fromFlexiblePolyline(
@@ -119,7 +115,7 @@ function Map(props: Props): Node {
             changeRoutes(g);
             map.addObject(g);
         }
-        if (hMap.map) makeRoute(hMap.map);
+        // if (hMap.map) makeRoute(hMap.map);
         return () => {
             map.removeEventListener("mapviewchange", handleMapViewChange);
         };
@@ -128,12 +124,8 @@ function Map(props: Props): Node {
     useEffect(() => {
         if (hMap.map) {
             makeRoute(hMap.map);
-            hMap.map.setZoom(10);
-            const lat = start.latitude;
-            const lng = start.longitude;
-            hMap.map.setCenter({ lat, lng });
         }
-    }, [start, destination]);
+    });
 
     return <div ref={mapContainer} className="col-md-9 col-12" id="map"></div>;
 }

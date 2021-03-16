@@ -2,6 +2,7 @@ import React, { useState, useEffect, type Node } from "react";
 import Map, { type MapDestination } from "./Map/Map";
 import Axios from "axios";
 import queryString from "query-string";
+import DropDown from "./../TripSearch/DropDown";
 // @flow
 const parsed = queryString.parse(location.search);
 function TripPlanner(): Node {
@@ -12,6 +13,24 @@ function TripPlanner(): Node {
         changeLocations: (Array<MapDestination>) => void,
     ] = useState();
 
+    const calendar =
+        document.getElementById("profileModal") == null ? null : (
+            <div className="d-flex flex-column">
+                <a
+                    href="#"
+                    className="btn btn-secondary rounded-pill mx-auto my-4 px-5 w-100 "
+                >
+                    Save in the calendar
+                </a>
+                <a
+                    href="#"
+                    className="btn btn-secondary rounded-pill mx-auto my-4 px-5 w-100 "
+                >
+                    Add a friend
+                </a>
+            </div>
+        );
+
     function swapTravelPoints(e) {
         e.preventDefault();
         const [tempStart, tempDestination] = [start, destination];
@@ -19,19 +38,29 @@ function TripPlanner(): Node {
         changeDestination(tempStart);
     }
 
-    async function getMapDestinations() {
-        const startPoint = start.includes(",") ? start.split(",")[0] : start;
-        const destPoint = destination.includes(",")
-            ? destination.split(",")[0]
-            : destination;
-        const response = await Axios.get(
-            `/api/map-destinations/${startPoint}-${destPoint}`
-        );
-        changeLocations(response.data);
+    function getMapDestinations() {
+        let delay = setTimeout(async () => {
+            const startPoint = start.includes(",")
+                ? start.split(",")[0]
+                : start;
+            const destPoint = destination.includes(",")
+                ? destination.split(",")[0]
+                : destination;
+            if (startPoint && destPoint) {
+                const response = await Axios.get(
+                    `/api/map-destinations/${startPoint}-${destPoint}`
+                );
+                if (response.data != "") changeLocations(response.data);
+            }
+        }, 500);
+        return delay;
     }
 
     useEffect(() => {
-        getMapDestinations();
+        let delay = getMapDestinations();
+        return () => {
+            clearTimeout(delay);
+        };
     }, [start, destination]);
 
     let hasLocations = typeof locations != "undefined" ? true : false;
@@ -82,16 +111,12 @@ function TripPlanner(): Node {
                         method="GET"
                         className="d-flex flex-column"
                     >
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                placeholder="Start"
-                                className="form-control"
-                                id="startPoint"
-                                value={start}
-                                onChange={changeStart}
-                            />
-                        </div>
+                        <DropDown
+                            point={start}
+                            name="start"
+                            changePoint={changeStart}
+                            isGroup={true}
+                        />
                         <div className="form-group d-flex flex-direction-row">
                             <a href="#" className="mr-auto my-3 my-lg-auto ">
                                 <img
@@ -120,25 +145,26 @@ function TripPlanner(): Node {
                                 </svg>
                             </a>
                         </div>
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                placeholder="Destination"
-                                className="form-control"
-                                id="destinationPoint"
-                                value={destination}
-                                onChange={changeDestination}
-                            />
-                        </div>
+                        <DropDown
+                            point={destination}
+                            name="destination"
+                            changePoint={changeDestination}
+                            isGroup={true}
+                        />
                     </form>
                 </div>
 
-                <a
+                {/* <a
                     href="#"
                     className="btn btn-success rounded-pill mx-auto my-4 px-5"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        changeStart(start);
+                        changeDestination(destination);
+                    }}
                 >
                     Start
-                </a>
+                </a> */}
 
                 {/* @guest
                             @if (Route::has('login'))
@@ -149,6 +175,8 @@ function TripPlanner(): Node {
                             <a href="#" className="btn btn-secondary rounded-pill mx-auto my-4 px-5 w-100 ">Add a friend</a>
                         </div>
                         @endguest */}
+
+                {calendar}
             </div>
             {hasLocations ? <Map {...locations} /> : <></>}
         </div>

@@ -5,6 +5,7 @@ import Axios from "axios";
 export type Props = {
     point: string,
     name: string,
+    isGroup?: boolean,
     changePoint: (string) => void,
 };
 
@@ -15,7 +16,7 @@ type Destination = {
 };
 
 function DropDown(props: Props): Node {
-    const { point, name, changePoint } = props;
+    const { point, name, changePoint, isGroup = false } = props;
     const [
         points: Array<Destination>,
         changePoints: (Array<Destination>) => void,
@@ -77,9 +78,12 @@ function DropDown(props: Props): Node {
         );
     }
 
-    async function changeDestinations() {
-        const response = await Axios.get(`/api/destinations/${point}`);
-        changePoints(response.data);
+    function changeDestinations() {
+        let delay = setTimeout(async () => {
+            const response = await Axios.get(`/api/destinations/${point}`);
+            changePoints(response.data);
+        }, 500);
+        return delay;
     }
 
     useEffect(() => {
@@ -91,10 +95,17 @@ function DropDown(props: Props): Node {
             changePoints([]);
             return;
         }
-        changeDestinations();
+        let delay = changeDestinations();
+        return () => {
+            clearTimeout(delay);
+        };
     }, [point]);
     return (
-        <div className="col-12 col-lg-3 dropdown">
+        <div
+            className={
+                (isGroup ? "form-group mt-1" : " col-lg-3") + " dropdown col-12"
+            }
+        >
             {input}
             {dropdown}
         </div>
