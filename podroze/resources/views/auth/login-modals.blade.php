@@ -200,8 +200,8 @@
                                                     <p class="text-center font-weight-bold text-dark h2">Hello {{ Auth::user()->name }}!</p>
                                                 </div>
                                                 <div class="card-body d-flex flex-column">
-                                                    <a href="#" class="btn btn-primary rounded-pill mb-4">Profile</a>
-                                                    <a href="#" class="btn btn-primary rounded-pill mb-4">Settings</a>
+                                                    <a href="{{url('/profile')}}" class="btn btn-primary rounded-pill mb-4">Profile</a>
+                                                    <a href="{{url('/profile')}}" class="btn btn-primary rounded-pill mb-4">Settings</a>
                                                     <a href="#" class="btn btn-success rounded-pill mt-5" href="{{ route('logout') }}"
                                                         onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">{{ __('Sign Out') }}</a>

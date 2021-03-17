@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{HomeController, MapController, MailController};
+use App\Http\Controllers\{HomeController, MapController, MailController, ProfileController};
 use Laravel\Socialite\Facades\Socialite;
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +24,8 @@ Auth::routes();
 Route::get('/', [HomeController::class, 'home']);
 Route::get('/home', [HomeController::class, 'home']);
 Route::get('/searchtrip', [MapController::class, 'searchtrip']);
+
+Route::get('/profile', [ProfileController::class, 'index']);
 // Login with social
 
 Route::get('/mail', [MailController::class, 'sendEmailReminder'])->name('mail');

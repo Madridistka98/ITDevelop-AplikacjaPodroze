@@ -11080,6 +11080,29 @@ button {
   border-radius: 2rem;
 }
 
+.calendar__number {
+  font-family: "Sansation";
+  position: absolute;
+  top: -2.5rem;
+  left: 0;
+  font-weight: bold;
+  text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.6);
+}
+
+.calendar__day-number {
+  font-family: "Sansation";
+  position: absolute;
+  top: -1.2rem;
+  left: 1.2rem;
+  font-weight: bold;
+  text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.6);
+}
+
+.trip__point img {
+  position: relative;
+  left: -2.5rem;
+}
+
 #app {
   min-height: 100vh;
   font-family: "Roboto";
