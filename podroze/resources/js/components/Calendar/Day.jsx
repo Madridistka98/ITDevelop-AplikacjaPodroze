@@ -1,13 +1,25 @@
 // @flow
 import React, { type Node } from "react";
 
-function Day(props): Node {
-    const { day, month, year, isSelected = false } = props;
+type Props = {
+    day: number,
+    month: number,
+    year: number,
+    selectedDay: Date,
+    changeSelectedDay: (Date) => void,
+};
+
+function Day(props: Props): Node {
+    const { day, month, year, selectedDay } = props;
+    const thisDate = new Date(year, month, day);
+    const isSelected =
+        selectedDay.toDateString() == thisDate.toDateString() ? true : false;
 
     function isWeekend(): boolean {
         const currentDay = new Date(year, month, day).getDay();
         return currentDay == 0 || currentDay == 6;
     }
+
     return (
         <div
             className={
@@ -15,7 +27,14 @@ function Day(props): Node {
                 "  d-flex flex-column m-1 p-4 position-relative "
             }
         >
-            <a href="#" className="m-5">
+            <a
+                href="#"
+                className="m-5"
+                onClick={(e) => {
+                    e.preventDefault();
+                    props.changeSelectedDay(thisDate);
+                }}
+            >
                 <p className="h1 text-muted calendar__day-number">{day}</p>
                 {isSelected && (
                     <img
