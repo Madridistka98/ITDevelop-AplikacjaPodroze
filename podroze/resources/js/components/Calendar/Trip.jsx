@@ -1,6 +1,10 @@
 // @flow
 import React, { type Node } from "react";
-function Trip(): Node {
+
+type Props = {
+    selectedDate: Date,
+};
+function Trip(props: Props): Node {
     return (
         <div className="row bg-dark rounded p-4">
             <div className="bg-secondary col-md-4 col-12 position-relative d-flex flex-column p-5">

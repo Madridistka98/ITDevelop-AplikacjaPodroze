@@ -35,4 +35,20 @@ class DestinationController extends Controller
        return "";
         
     }
+    public function getMultipleDestinations(string $destinationsSring)
+    {
+        if($destinationsSring == "")
+        {
+            return "noResults";
+        }
+        $destinations = explode("--",$destinationsSring);
+        $mapDestinations = Destination::select("ID", "city",  "latitude", "longitude")->whereIn("city",  $destinations)->get();
+       if($mapDestinations->count() > 0 && $mapDestinations->count() > 0)
+       {
+        $destinationsJson = $mapDestinations->toJson();
+        return $destinationsJson;
+       }
+       return "";
+        
+    }
 }

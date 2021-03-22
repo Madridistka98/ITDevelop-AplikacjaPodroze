@@ -6,7 +6,7 @@ function CalendarContainer(): Node {
     const [selectedDay, changeSelectedDay] = useState(new Date());
     return (
         <div className="container">
-            <Trip />
+            <Trip selectedDay={selectedDay} />
             <Calendar
                 date={new Date()}
                 selectedDay={selectedDay}

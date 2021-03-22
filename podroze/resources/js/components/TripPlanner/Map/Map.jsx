@@ -15,6 +15,7 @@ type MapDestination = {
 
 type Props = {
     locations: Array<MapDestination>,
+    additionalStops: Array<MapDestination>,
     transport: string,
 };
 
@@ -23,6 +24,7 @@ function Map(props: Props): Node {
     const [routes, changeRoutes] = useState();
     const mapContainer = useRef(null);
     const start = props.locations[0];
+    const additionalStops = props.additionalStops;
     const destination = props.locations[1];
     const transport = props.transport;
     function handleMapViewChange(e) {
@@ -38,7 +40,7 @@ function Map(props: Props): Node {
         }
     }
 
-    function makeRoute(map) {
+    function makeRoute(map, start, destination) {
         const routingParameters = {
             routingMode: "fast",
             transportMode: transport,
@@ -53,7 +55,7 @@ function Map(props: Props): Node {
         // Define a callback function to process the routing response:
         const onResult = function (result) {
             // ensure that at least one route was found
-            routes.removeAll();
+
             if (result.routes.length) {
                 result.routes[0].sections.forEach((section) => {
                     // Create a linestring to use as a point source for the route line
@@ -126,7 +128,13 @@ function Map(props: Props): Node {
 
     useEffect(() => {
         if (hMap.map) {
-            makeRoute(hMap.map);
+            routes.removeAll();
+            const points = [...additionalStops];
+            points.push(destination);
+            points.unshift(start);
+            for (let index = 0; index < points.length - 1; index++) {
+                makeRoute(hMap.map, points[index], points[index + 1]);
+            }
         }
     });
 
