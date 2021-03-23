@@ -17,6 +17,7 @@ class CreateTrip extends Migration
             $table->id();
             $table->timestamps();
             $table->string("name", 100)->nullable();
+            $table->string("transport", 100);
             $table->date("trip_date");
             $table->foreignId("start_id");
             $table->foreignId("destination_id");

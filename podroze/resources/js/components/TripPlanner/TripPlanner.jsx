@@ -8,9 +8,20 @@ const parsed = queryString.parse(location.search);
 function TripPlanner(): Node {
     const [start, changeStart] = useState(parsed.start);
     const [destination, changeDestination] = useState(parsed.destination);
-    const [transport, changeTransport] = useState("car");
-    const [additionalStops, changeAdditionalStops] = useState([]);
-    const [numberOfStops, changeNumberOfStops] = useState(0);
+    const initialTransport = parsed.transport;
+    console.log(initialTransport);
+    const [transport, changeTransport] = useState(
+        initialTransport ? initialTransport : "car"
+    );
+    const initialStops = parsed.destinations
+        ? parsed.destinations.split("--")
+        : [];
+    const [additionalStops, changeAdditionalStops] = useState(
+        initialStops ? initialStops : []
+    );
+    const [numberOfStops, changeNumberOfStops] = useState(
+        initialStops ? initialStops.length : 0
+    );
     const [
         locations: Array<MapDestination>,
         changeLocations: (Array<MapDestination>) => void,
@@ -58,18 +69,19 @@ function TripPlanner(): Node {
             return;
         }
         const userID = document.getElementById("userID").value;
-        Axios.post("/api/trip/", {
+        Axios.post("/api/trip", {
             user: userID,
             name: tripName,
             mainDestinations: locations,
             additionalStops: validStops,
             date: parsed.date,
+            transport: transport,
         })
             .then(() => {
                 alert("Trip added");
             })
             .catch(() => {
-                "Error when addind trip";
+                "Error when adding trip";
             });
     }
     function swapTravelPoints(e) {

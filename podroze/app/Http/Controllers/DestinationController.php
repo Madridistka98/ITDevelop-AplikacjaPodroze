@@ -58,6 +58,7 @@ class DestinationController extends Controller
         $name = $request->input('name');
         $locations = $request->input('mainDestinations');
         $additionalStops = $request->input('additionalStops');
+        $transport = $request->input('transport');
         $date = $request->input('date');
         $start = $locations[0];
         $destination = $locations[1];
@@ -77,6 +78,7 @@ class DestinationController extends Controller
         }
         $trip->name = $name;
         $trip->trip_date = $date;
+        $trip->transport = $transport;
         $trip->start()->associate($startDest);
         $trip->destination()->associate($endDest);
         $trip->user()->associate($user);
