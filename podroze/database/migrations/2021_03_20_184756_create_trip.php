@@ -13,19 +13,20 @@ class CreateTrip extends Migration
      */
     public function up()
     {
-        Schema::create('trip', function (Blueprint $table) {
+        Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string("name", 100)->nullable();
             $table->date("trip_date");
-            $table->foreignId("start");
-            $table->foreignId("destination");
+            $table->foreignId("start_id");
+            $table->foreignId("destination_id");
+            $table->foreignId("user_id");
         });
 
         Schema::create('trip_destinations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("trip");
-            $table->foreignId("destination");
+            $table->foreignId("trip_id");
+            $table->foreignId("destination_id");
             $table->integer("sort_order");
         });
     }
@@ -38,5 +39,6 @@ class CreateTrip extends Migration
     public function down()
     {
         Schema::dropIfExists('trip');
+        Schema::dropIfExists('trip_destinations');
     }
 }

@@ -19,6 +19,8 @@ Route::middleware('web') -> group(base_path('routes/web.php'));
 Route::get('/destinations/{text}',[DestinationController::class,'getNames']);
 Route::get('/map-destinations/{start}-{destination}',[DestinationController::class,'getDestinations']);
 Route::get('/map-multiple-destinations/{destinations}',[DestinationController::class,'getMultipleDestinations']);
+Route::get('/trip/{userID}-{date}' ,[DestinationController::class,'getTrip']);
+Route::post('/trip/' ,[DestinationController::class,'createTrip']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

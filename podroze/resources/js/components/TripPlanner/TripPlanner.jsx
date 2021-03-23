@@ -24,6 +24,7 @@ function TripPlanner(): Node {
                 <a
                     href="#"
                     className="btn btn-secondary rounded-pill mx-auto my-4 px-5 w-100 "
+                    onClick={createTrips}
                 >
                     Save in the calendar
                 </a>
@@ -36,6 +37,41 @@ function TripPlanner(): Node {
             </div>
         );
 
+    function createTrips(e) {
+        e.preventDefault();
+        if (locations.length < 2) {
+            alert("Start or destinations are not valid");
+            return;
+        }
+        let validStops = [];
+        if (mapDestinations.length > 0) {
+            console.log(mapDestinations);
+            mapDestinations.forEach((stop) => {
+                if (typeof stop.ID != "undefined") {
+                    validStops.push(stop);
+                }
+            });
+        }
+        let tripName = window.prompt("Enter you trip name");
+        if (tripName == "") {
+            alert("Invalid trip name");
+            return;
+        }
+        const userID = document.getElementById("userID").value;
+        Axios.post("/api/trip/", {
+            user: userID,
+            name: tripName,
+            mainDestinations: locations,
+            additionalStops: validStops,
+            date: parsed.date,
+        })
+            .then(() => {
+                alert("Trip added");
+            })
+            .catch(() => {
+                "Error when addind trip";
+            });
+    }
     function swapTravelPoints(e) {
         e.preventDefault();
         const [tempStart, tempDestination] = [start, destination];

@@ -198,6 +198,7 @@
                                                 <div class="card-header form__register--header  d-flex flex-column">
                                                     <img class="img img-fluid mx-auto" src="./static/images/icons/user_icon_big.png" alt="user_big">
                                                     <p class="text-center font-weight-bold text-dark h2">Hello {{ Auth::user()->name }}!</p>
+                                                    <input type="hidden" id="userID" value="{{ Auth::user()->id}}">
                                                 </div>
                                                 <div class="card-body d-flex flex-column">
                                                     <a href="{{url('/profile')}}" class="btn btn-primary rounded-pill mb-4">Profile</a>
