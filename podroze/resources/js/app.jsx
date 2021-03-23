@@ -17,9 +17,10 @@ import ReactDOM from "react-dom";
 import TripSearch from "./components/TripSearch/TripSearch";
 import PopularDestinations from "./components/PopularDestinations/PopularDestinations";
 import TripPlanner from "./components/TripPlanner/TripPlanner";
+import CalendarContainer from "./components/Calendar/CalendarContainer";
 
 window.bootstrap = Bootstrap;
-//let modal = new bootstrap.Modal(document.getElementById("loginModal"));
+
 if (document.getElementById("trip-search")) {
     ReactDOM.render(<TripSearch />, document.getElementById("trip-search"));
 }
@@ -33,4 +34,7 @@ if (document.getElementById("popular-destinations")) {
 
 if (document.getElementById("maps-app")) {
     ReactDOM.render(<TripPlanner />, document.getElementById("maps-app"));
+}
+if (document.getElementById("calendar")) {
+    ReactDOM.render(<CalendarContainer />, document.getElementById("calendar"));
 }

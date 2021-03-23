@@ -6,7 +6,7 @@ export type Props = {
     point: string,
     name: string,
     isGroup?: boolean,
-    changePoint: (string) => void,
+    changePoint: ((string | Array<string>) => string | Array<string>) => void,
 };
 
 type Destination = {
@@ -32,14 +32,28 @@ function DropDown(props: Props): Node {
             value={point}
             autoComplete="off"
             onChange={(e) => {
-                changePoint(e.target.value);
+                changePoint((state) => {
+                    if (Array.isArray(state)) {
+                        const key = parseInt(name.split(":")[1]);
+                        const temp = state;
+                        temp[key] = e.target.value;
+                        return [...temp];
+                    } else return e.target.value;
+                });
             }}
         />
     );
 
     function selectPoint(e) {
         e.preventDefault();
-        changePoint(e.target.text);
+        changePoint((state) => {
+            if (Array.isArray(state)) {
+                const key = parseInt(name.split(":")[1]);
+                const temp = state;
+                temp[key] = e.target.text;
+                return [...temp];
+            } else return e.target.text;
+        });
     }
 
     if (points && points.length > 0) {
@@ -72,7 +86,14 @@ function DropDown(props: Props): Node {
                 aria-expanded="false"
                 data-toggle="dropdown"
                 onChange={(e) => {
-                    changePoint(e.target.value);
+                    changePoint((state) => {
+                        if (Array.isArray(state)) {
+                            const key = parseInt(name.split(":")[1]);
+                            const temp = state;
+                            temp[key] = e.target.value;
+                            return [...temp];
+                        } else return e.target.value;
+                    });
                 }}
             />
         );
@@ -88,6 +109,7 @@ function DropDown(props: Props): Node {
 
     useEffect(() => {
         if (
+            typeof point == "undefined" ||
             point.length == 0 ||
             (points.length == 1 &&
                 point == points[0].city + ", " + points[0].country)
