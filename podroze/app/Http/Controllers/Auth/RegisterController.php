@@ -72,7 +72,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        Mail::send("emails.welcome",['user' => $user], function($m) {
+        Mail::send("emails.welcome",['user' => $user], function($m) use ($user){
             $m->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')); 
 
             $m->to($user->email, $user->name)->subject("Welcome to trip planner"); });
