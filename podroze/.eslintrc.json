@@ -22,7 +22,8 @@
         "react",
         "prettier",
         "react-hooks",
-        "flowtype"
+        "flowtype",
+        "eslint-plugin-html",
     ],
     "rules": {
         "prettier/prettier": "error",
