@@ -65,11 +65,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'surname' => $data['surname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        Mail::send("emails.welcome",['user' => $user], function($m) {
+            $m->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')); 
+
+            $m->to($user->email, $user->name)->subject("Welcome to trip planner"); });
+
     }
 }
