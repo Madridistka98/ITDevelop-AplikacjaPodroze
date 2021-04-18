@@ -25,16 +25,6 @@
          <a class="navbar-brand col-md-2  col-12" href="{{ url('/') }}">
                     <img class="img img-fluid" src="./static/images/Nazwa_dinozaur.png" alt="logo_nawigacja"> 
          </a>
-         <div class="d-flex flex-column flex-sm-row justify-content-around col">
-                    <a href="#" class="btn btn-secondary mb-1 mb-sm-0 np-1">
-                        <img class="img img-fluid p-1" src="./static/images/icons/bed_1.png" alt="bed">
-                    </a>
-                    <a href="#" class="btn btn-secondary mb-1 mb-sm-0 p-1">
-                        <img class="img img-fluid p-1" src="./static/images/icons/restaurant_1.png" alt="bed">
-                    </a>
-                    <a href="#" class="btn btn-secondary mb-1 mb-sm-0 p-1">
-                        <img class="img img-fluid p-1" src="./static/images/icons/zwiedzanie_1.png" alt="bed">
-                    </a>
-         </div>
+         
     </div>
 </div>

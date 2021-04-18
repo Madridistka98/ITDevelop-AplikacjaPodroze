@@ -9,7 +9,6 @@ function TripPlanner(): Node {
     const [start, changeStart] = useState(parsed.start);
     const [destination, changeDestination] = useState(parsed.destination);
     const initialTransport = parsed.transport;
-    console.log(initialTransport);
     const [transport, changeTransport] = useState(
         initialTransport ? initialTransport : "car"
     );
@@ -49,12 +48,12 @@ function TripPlanner(): Node {
         );
 
     function createTrips(e) {
+        let validStops = [];
         e.preventDefault();
         if (locations.length < 2) {
             alert("Start or destinations are not valid");
             return;
         }
-        let validStops = [];
         if (mapDestinations.length > 0) {
             console.log(mapDestinations);
             mapDestinations.forEach((stop) => {
@@ -166,6 +165,29 @@ function TripPlanner(): Node {
     return (
         <div className="row flex-grow-1">
             <div className="d-flex flex-column col-md-3 col-12 bg-dark ">
+                <div className="d-flex flex-column flex-sm-row justify-content-around col my-3 ">
+                    <a href="#" className="btn btn-secondary mb-1 mb-sm-0 np-1">
+                        <img
+                            className="img img-fluid p-1"
+                            src="./static/images/icons/bed_1.png"
+                            alt="bed"
+                        />
+                    </a>
+                    <a href="#" className="btn btn-secondary mb-1 mb-sm-0 p-1">
+                        <img
+                            className="img img-fluid p-1"
+                            src="./static/images/icons/restaurant_1.png"
+                            alt="bed"
+                        />
+                    </a>
+                    <a href="#" className="btn btn-secondary mb-1 mb-sm-0 p-1">
+                        <img
+                            className="img img-fluid p-1"
+                            src="./static/images/icons/zwiedzanie_1.png"
+                            alt="bed"
+                        />
+                    </a>
+                </div>
                 <a href="{{ url('/') }}" className="btn btn-secondary w-100">
                     <img
                         src="./static/images/dino_mapa.png"

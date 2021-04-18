@@ -54,7 +54,8 @@ class DestinationController extends Controller
         
     }
 
-    public function createTrip(Request $request){
+    public function createTrip(Request $request)
+    {
         $name = $request->input('name');
         $locations = $request->input('mainDestinations');
         $additionalStops = $request->input('additionalStops');
@@ -64,16 +65,15 @@ class DestinationController extends Controller
         $destination = $locations[1];
         $user = User::find($request->input("user"));
 
-        $destIDs = array_map(function($item) {
+        $destIDs = array_map(function ($item) {
             return $item['ID'];
         }, $additionalStops);
         $startDest = Destination::find($start['ID']);
         $endDest = Destination::find($destination['ID']);
-        $destinations = Destination::whereIn("ID",  $destIDs)->get();
+        $destinations = Destination::whereIn("ID", $destIDs)->get();
 
         $trip = Trip::where("user_id", $user->id)->where("trip_date", $date)->first();
-        if(!isset($trip->id))
-        {
+        if (!isset($trip->id)) {
             $trip = new Trip();
         }
         $trip->name = $name;
