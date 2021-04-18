@@ -17,6 +17,7 @@ type Destination = {
 
 function DropDown(props: Props): Node {
     const { point, name, changePoint, isGroup = false } = props;
+    const [localPoint, changeLocalPoint] = useState(point);
     const [
         points: Array<Destination>,
         changePoints: (Array<Destination>) => void,
@@ -29,10 +30,10 @@ function DropDown(props: Props): Node {
             className="form-control"
             placeholder={name}
             name={name}
-            value={point}
+            value={localPoint}
             autoComplete="off"
             onChange={(e) => {
-                changePoint((state) => {
+                changeLocalPoint((state) => {
                     if (Array.isArray(state)) {
                         const key = parseInt(name.split(":")[1]);
                         const temp = state;
@@ -51,8 +52,12 @@ function DropDown(props: Props): Node {
                 const key = parseInt(name.split(":")[1]);
                 const temp = state;
                 temp[key] = e.target.text;
+                changeLocalPoint([...temp]);
                 return [...temp];
-            } else return e.target.text;
+            } else {
+                changeLocalPoint(e.target.text);
+                return e.target.text;
+            }
         });
     }
 
@@ -80,13 +85,13 @@ function DropDown(props: Props): Node {
                 className="form-control"
                 placeholder={name}
                 name={name}
-                value={point}
+                value={localPoint}
                 autoComplete="off"
                 aria-haspopup="true"
                 aria-expanded="false"
                 data-toggle="dropdown"
                 onChange={(e) => {
-                    changePoint((state) => {
+                    changeLocalPoint((state) => {
                         if (Array.isArray(state)) {
                             const key = parseInt(name.split(":")[1]);
                             const temp = state;
@@ -101,7 +106,7 @@ function DropDown(props: Props): Node {
 
     function changeDestinations() {
         let delay = setTimeout(async () => {
-            const response = await Axios.get(`/api/destinations/${point}`);
+            const response = await Axios.get(`/api/destinations/${localPoint}`);
             changePoints(response.data);
         }, 500);
         return delay;
@@ -109,10 +114,10 @@ function DropDown(props: Props): Node {
 
     useEffect(() => {
         if (
-            typeof point == "undefined" ||
-            point.length == 0 ||
+            typeof localPoint == "undefined" ||
+            localPoint.length == 0 ||
             (points.length == 1 &&
-                point == points[0].city + ", " + points[0].country)
+                localPoint == points[0].city + ", " + points[0].country)
         ) {
             changePoints([]);
             return;
@@ -121,7 +126,7 @@ function DropDown(props: Props): Node {
         return () => {
             clearTimeout(delay);
         };
-    }, [point]);
+    }, [localPoint]);
     return (
         <div
             className={
