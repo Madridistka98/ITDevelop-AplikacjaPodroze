@@ -84,8 +84,8 @@ class DestinationController extends Controller
         $trip->user()->associate($user);
         $trip->save();
         $count = 1;
-        foreach($destinations as $dest)
-        {
+        $trip->destinations()->detach();
+        foreach ($destinations as $dest) {
             $trip->destinations()->attach($dest, ['sort_order' => $count]);
             $count++;
         }

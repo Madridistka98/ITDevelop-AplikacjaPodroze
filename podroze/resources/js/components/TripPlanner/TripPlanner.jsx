@@ -26,7 +26,7 @@ function TripPlanner(): Node {
         locations: Array<MapDestination>,
         changeLocations: (Array<MapDestination>) => void,
     ] = useState();
-    const [mapDestinations, changeMapDestinations] = useState([]);
+    // const [mapDestinations, changeMapDestinations] = useState([]);
     const calendar =
         document.getElementById("profileModal") == null ? null : (
             <div className="d-flex flex-column">
@@ -49,13 +49,15 @@ function TripPlanner(): Node {
     function createTrips(e) {
         let validStops = [];
         e.preventDefault();
-        if (locations.length < 2) {
+        if (!locations["start"] && !locations["destination"]) {
             alert("Start or destinations are not valid");
             return;
         }
-        if (mapDestinations.length > 0) {
-            console.log(mapDestinations);
-            mapDestinations.forEach((stop) => {
+        if (
+            locations["additionalStops"] &&
+            locations["additionalStops"].length > 0
+        ) {
+            locations["additionalStops"].forEach((stop) => {
                 if (typeof stop.ID != "undefined") {
                     validStops.push(stop);
                 }
@@ -70,7 +72,7 @@ function TripPlanner(): Node {
         Axios.post("/api/trip", {
             user: userID,
             name: tripName,
-            mainDestinations: locations,
+            mainDestinations: [locations["start"], locations["destination"]],
             additionalStops: validStops,
             date: parsed.date,
             transport: transport,
@@ -95,6 +97,10 @@ function TripPlanner(): Node {
                 const response = await Axios.get(
                     `/api/map-destinations/${startPoint}-${destPoint}`
                 );
+                let data = [];
+                data["start"] = response.data[0];
+                data["destination"] = response.data[1];
+                console.log(data);
                 if (additionalStops.length > 0) {
                     let query = "/api/map-multiple-destinations/";
                     additionalStops.forEach((stop) => {
@@ -105,12 +111,16 @@ function TripPlanner(): Node {
                     });
                     query = query.slice(0, query.length - 2);
                     const queryRes = await Axios.get(query);
-                    changeMapDestinations(queryRes.data);
-                } else {
-                    changeMapDestinations([]);
-                }
+                    console.log(data);
+                    data["additionalStops"] = queryRes.data;
+                    console.log(data);
 
-                if (response.data != "") changeLocations(response.data);
+                    // changeMapDestinations(queryRes.data);
+                } //else {
+                // changeMapDestinations([]);
+                //}
+
+                if (response.data != "") changeLocations(data);
             }
         }, 500);
         return delay;
@@ -128,7 +138,7 @@ function TripPlanner(): Node {
     return (
         <div className="row flex-grow-1">
             <div className="d-flex flex-column col-md-3 col-12 bg-dark ">
-                <div className="d-flex flex-column flex-sm-row justify-content-around col my-3 ">
+                <div className="d-flex flex-column flex-sm-row justify-content-around my-3 ">
                     <Button icon="./static/images/icons/bed_1.png" name="bed" />
                     <Button
                         icon="./static/images/icons/restaurant_1.png"
@@ -148,7 +158,7 @@ function TripPlanner(): Node {
                 </a>
                 <div className="d-flex flex-row  justify-content-around mx-2 my-4">
                     <Button
-                        icon="./static/images/icons/samolot_1.png"
+                        icon="./static/images/icons/bus1scaled.png"
                         name="bus"
                         effect={changeTransport}
                     />
@@ -163,7 +173,7 @@ function TripPlanner(): Node {
                         effect={changeTransport}
                     />
                     <Button
-                        icon="./static/images/icons/train_1.png"
+                        icon="./static/images/icons/pieszy1scaled.png"
                         name="pedestrian"
                         effect={changeTransport}
                     />
@@ -182,11 +192,7 @@ function TripPlanner(): Node {
                 {calendar}
             </div>
             {hasLocations ? (
-                <Map
-                    locations={[...locations]}
-                    additionalStops={mapDestinations}
-                    transport={transport}
-                />
+                <Map locations={locations} transport={transport} />
             ) : (
                 ""
             )}
