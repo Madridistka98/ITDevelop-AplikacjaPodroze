@@ -25,8 +25,8 @@ class DestinationController extends Controller
         if ($start == "" || $destination == "") {
             return "noResults";
         }
-        $mapStart = Destination::select("ID", "city",  "latitude", "longitude")->where("city", "=", $start)->get();
-        $mapDestination = Destination::select("ID", "city",  "latitude", "longitude")
+        $mapStart = Destination::select("ID", "city", "latitude", "longitude")->where("city", "=", $start)->get();
+        $mapDestination = Destination::select("ID", "city", "latitude", "longitude")
         ->where("city", "=", $destination)->get();
         if ($mapStart->count() > 0 && $mapDestination->count() > 0) {
             $destinationsJson = $mapStart->concat($mapDestination)->toJson();

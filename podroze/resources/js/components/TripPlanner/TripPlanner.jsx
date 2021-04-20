@@ -88,9 +88,11 @@ function TripPlanner(): Node {
     async function getHotels() {
         let query = "/api/hotels/";
         query += locations.start.city;
-        locations.additionalStops.forEach((loc) => {
-            query += "--" + loc.city;
-        });
+        if (locations.additionalStops) {
+            locations.additionalStops.forEach((loc) => {
+                query += "--" + loc.city;
+            });
+        }
         query += "--" + locations.destination.city;
         const response = await Axios.get(query);
         console.log(response.data);
