@@ -11,47 +11,42 @@ class DestinationController extends Controller
 {
     public function getNames(string $text)
     {
-        if($text == "")
-        {
+        if ($text == "") {
             return "noResults";
         }
-        $destinations = Destination::select("ID", "city", "country")->where("city", "like", "$text%")->orWhere("country", "like", "$text%")->get();
+        $destinations = Destination::select("ID", "city", "country")->where("city", "like", "$text%")
+        ->orWhere("country", "like", "$text%")->get();
         $destinationsJson = $destinations->toJson();
         return $destinationsJson;
-
     }
 
     public function getDestinations(string $start, string $destination)
     {
-        if($start == "" || $destination == "")
-        {
+        if ($start == "" || $destination == "") {
             return "noResults";
         }
         $mapStart = Destination::select("ID", "city",  "latitude", "longitude")->where("city", "=", $start)->get();
-        $mapDestination = Destination::select("ID", "city",  "latitude", "longitude")->where("city", "=", $destination)->get();
-       if($mapStart->count() > 0 && $mapDestination->count() > 0)
-       {
-        $destinationsJson = $mapStart->concat($mapDestination)->toJson();
-        return $destinationsJson;
-       }
-       return "";
-        
+        $mapDestination = Destination::select("ID", "city",  "latitude", "longitude")
+        ->where("city", "=", $destination)->get();
+        if ($mapStart->count() > 0 && $mapDestination->count() > 0) {
+            $destinationsJson = $mapStart->concat($mapDestination)->toJson();
+            return $destinationsJson;
+        }
+        return "";
     }
     public function getMultipleDestinations(string $destinationsSring)
     {
-        if($destinationsSring == "")
-        {
+        if ($destinationsSring == "") {
             return "noResults";
         }
-        $destinations = explode("--",$destinationsSring);
-        $mapDestinations = Destination::select("ID", "city",  "latitude", "longitude")->whereIn("city",  $destinations)->get();
-       if($mapDestinations->count() > 0 && $mapDestinations->count() > 0)
-       {
-        $destinationsJson = $mapDestinations->toJson();
-        return $destinationsJson;
-       }
-       return "";
-        
+        $destinations = explode("--", $destinationsSring);
+        $mapDestinations = Destination::select("ID", "city", "latitude", "longitude")
+            ->whereIn("city", $destinations)->get();
+        if ($mapDestinations->count() > 0 && $mapDestinations->count() > 0) {
+            $destinationsJson = $mapDestinations->toJson();
+            return $destinationsJson;
+        }
+        return "";
     }
 
     public function createTrip(Request $request)
@@ -79,27 +74,43 @@ class DestinationController extends Controller
         $trip->name = $name;
         $trip->trip_date = $date;
         $trip->transport = $transport;
-        $trip->start()->associate($startDest);
-        $trip->destination()->associate($endDest);
         $trip->user()->associate($user);
         $trip->save();
         $count = 1;
         $trip->destinations()->detach();
+        $trip->destinations()->attach($startDest, ['sort_order' => $count]);
+        $count++;
         foreach ($destinations as $dest) {
             $trip->destinations()->attach($dest, ['sort_order' => $count]);
             $count++;
         }
+        $trip->destinations()->attach($endDest, ['sort_order' => $count]);
+        $count++;
         return "Done";
     }
     public function getTrip($userID, $date)
     {
         $trip = Trip::where("user_id", $userID)->where("trip_date", $date)->first();
-        if($trip == null)
-        return "";
+        if ($trip == null) {
+            return "";
+        }
+        //$trip->start;
+        // $trip->destination;
 
-        $trip->start;
-        $trip->destination;
-        $trip->destinations;
-        return $trip->toJson();
+        /**
+         *  @var Illuminate\Support\Collection
+         */
+        $sortedDestinations = $trip->destinations->sortBy(function ($dest, $key) {
+            return $dest->pivot->sort_order;
+        });
+        $response = collect([
+            "start" => $sortedDestinations->shift(),
+            "destination" => $sortedDestinations->pop(),
+            "destinations" => $sortedDestinations,
+            "id" => $trip->id,
+            "name" => $trip->name,
+            "transport" => $trip->transport,
+        ]);
+        return $response->toJson();
     }
 }

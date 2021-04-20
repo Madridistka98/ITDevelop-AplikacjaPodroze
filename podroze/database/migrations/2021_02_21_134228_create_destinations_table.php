@@ -18,8 +18,8 @@ class CreateDestinationsTable extends Migration
             $table->string('city');
             $table->string('country');
             $table->string('name');
-            $table->decimal('latitude',8,6 );
-            $table->decimal('longitude',9,6 );
+            $table->decimal('latitude', 8,6);
+            $table->decimal('longitude', 9,6);
             $table->timestamps();
         });
     }
