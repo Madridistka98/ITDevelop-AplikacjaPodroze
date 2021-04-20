@@ -141,7 +141,7 @@ function Map(props: Props): Node {
         }
     });
 
-    return <div ref={mapContainer} className="col-md-9 col-12" id="map"></div>;
+    return <div ref={mapContainer} className="w-100 h-100" id="map"></div>;
 }
 
 export default Map;

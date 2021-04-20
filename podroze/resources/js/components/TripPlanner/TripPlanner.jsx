@@ -26,7 +26,7 @@ function TripPlanner(): Node {
         locations: Array<MapDestination>,
         changeLocations: (Array<MapDestination>) => void,
     ] = useState();
-    // const [mapDestinations, changeMapDestinations] = useState([]);
+
     const calendar =
         document.getElementById("profileModal") == null ? null : (
             <div className="d-flex flex-column">
@@ -85,6 +85,17 @@ function TripPlanner(): Node {
             });
     }
 
+    async function getHotels() {
+        let query = "/api/hotels/";
+        query += locations.start.city;
+        locations.additionalStops.forEach((loc) => {
+            query += "--" + loc.city;
+        });
+        query += "--" + locations.destination.city;
+        const response = await Axios.get(query);
+        console.log(response.data);
+    }
+
     function getMapDestinations() {
         let delay = setTimeout(async () => {
             const startPoint = start.includes(",")
@@ -114,11 +125,7 @@ function TripPlanner(): Node {
                     console.log(data);
                     data["additionalStops"] = queryRes.data;
                     console.log(data);
-
-                    // changeMapDestinations(queryRes.data);
-                } //else {
-                // changeMapDestinations([]);
-                //}
+                }
 
                 if (response.data != "") changeLocations(data);
             }
@@ -139,7 +146,13 @@ function TripPlanner(): Node {
         <div className="row flex-grow-1">
             <div className="d-flex flex-column col-md-3 col-12 bg-dark ">
                 <div className="d-flex flex-column flex-sm-row justify-content-around my-3 ">
-                    <Button icon="./static/images/icons/bed_1.png" name="bed" />
+                    <Button
+                        icon="./static/images/icons/bed_1.png"
+                        name="bed"
+                        effect={function (e) {
+                            getHotels();
+                        }}
+                    />
                     <Button
                         icon="./static/images/icons/restaurant_1.png"
                         name="restaurant"
@@ -191,11 +204,13 @@ function TripPlanner(): Node {
 
                 {calendar}
             </div>
-            {hasLocations ? (
-                <Map locations={locations} transport={transport} />
-            ) : (
-                ""
-            )}
+            <div className="col-md-9 col-12">
+                {hasLocations ? (
+                    <Map locations={locations} transport={transport} />
+                ) : (
+                    ""
+                )}
+            </div>
         </div>
     );
 }
