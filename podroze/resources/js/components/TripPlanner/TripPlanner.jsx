@@ -151,7 +151,7 @@ function TripPlanner(): Node {
                     <Button
                         icon="./static/images/icons/bed_1.png"
                         name="bed"
-                        effect={function (e) {
+                        effect={function () {
                             getHotels();
                         }}
                     />

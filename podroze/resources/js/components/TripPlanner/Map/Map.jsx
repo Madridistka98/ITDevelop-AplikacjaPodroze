@@ -13,9 +13,13 @@ type MapDestination = {
     longitude: number,
 };
 
-type Props = {
-    locations: Array<MapDestination>,
+type Locations = {
+    start: MapDestination,
+    destination: MapDestination,
     additionalStops: Array<MapDestination>,
+};
+type Props = {
+    locations: Locations,
     transport: string,
 };
 
