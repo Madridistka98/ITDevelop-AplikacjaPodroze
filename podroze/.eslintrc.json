@@ -22,8 +22,8 @@
         "react",
         "prettier",
         "react-hooks",
-        "flowtype",
-        "eslint-plugin-html",
+        "flowtype"
+        // "eslint-plugin-html"
     ],
     "rules": {
         "prettier/prettier": "error",
@@ -31,12 +31,12 @@
         "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
     },
     "settings": {
-    "flowtype": {
-      "onlyFilesWithFlowAnnotation": true
-    },
-    "react": {
-        "version": "16.14.0",
-        "flowVersion": "0.145.0" 
+        "flowtype": {
+            "onlyFilesWithFlowAnnotation": true
+        },
+        "react": {
+            "version": "16.14.0",
+            "flowVersion": "0.145.0"
+        }
     }
-  }
 }

@@ -22,7 +22,7 @@ class Trip extends Model
         return $this->belongsTo(User::class);
     }
 
-    function destinations()
+    public function destinations()
     {
         return $this->belongsToMany(Destination::class, 'trip_destinations')->withPivot('sort_order');
     }

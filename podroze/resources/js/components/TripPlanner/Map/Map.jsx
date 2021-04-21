@@ -20,12 +20,15 @@ type Props = {
 };
 
 function Map(props: Props): Node {
+    console.log(props);
     const [hMap, changeMap] = useState({});
     const [routes, changeRoutes] = useState();
     const mapContainer = useRef(null);
-    const start = props.locations[0];
-    const additionalStops = props.additionalStops;
-    const destination = props.locations[1];
+    const start = props.locations["start"];
+    const additionalStops = props.locations["additionalStops"]
+        ? props.locations["additionalStops"]
+        : [];
+    const destination = props.locations["destination"];
     const transport = props.transport;
     function handleMapViewChange(e) {
         if (e.newValue && e.newValue.lookAt && hMap.map) {
@@ -142,3 +145,4 @@ function Map(props: Props): Node {
 }
 
 export default Map;
+export type { MapDestination };
