@@ -21,10 +21,10 @@ class HotelsController extends Controller
         $hotels = [];
         foreach ($destinations as $dest) {
             $city = $dest->city;
-            $hotels[$city] = [];
-             $hotels["errors"] = [];
+            $hotels["cities"][$city] = [];
+            $hotels["errors"] = [];
             if (Cache::has($city)) {
-                $hotels[$city] = Cache::get($city);
+                $hotels["cities"][$city] = Cache::get($city);
             } else {
                 $response = Http::withHeaders([
                 'x-rapidapi-key' => env("HOTELS_API_KEY"),
@@ -43,7 +43,7 @@ class HotelsController extends Controller
                         $data['longitude'] = $hotel['longitude'];
                         return $data;
                     }, $res);
-                    $hotels[$city] = $resHotels;
+                    $hotels['cities'][$city] = $resHotels;
                     Cache::put($city, $resHotels, now()->addMonths(3));
                 }
             }

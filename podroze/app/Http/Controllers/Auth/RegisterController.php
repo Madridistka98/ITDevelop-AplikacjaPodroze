@@ -76,6 +76,6 @@ class RegisterController extends Controller
             $m->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')); 
 
             $m->to($user->email, $user->name)->subject("Welcome to trip planner"); });
-
+            return $user;
     }
 }

@@ -27,6 +27,8 @@ function TripPlanner(): Node {
         changeLocations: (Array<MapDestination>) => void,
     ] = useState();
 
+    const [hotels, changeHotels] = useState([]);
+    const [selectedHotel, changeSelectedHotel] = useState({});
     const calendar =
         document.getElementById("profileModal") == null ? null : (
             <div className="d-flex flex-column">
@@ -95,47 +97,47 @@ function TripPlanner(): Node {
         }
         query += "--" + locations.destination.city;
         const response = await Axios.get(query);
-        console.log(response.data);
-    }
-
-    function getMapDestinations() {
-        let delay = setTimeout(async () => {
-            const startPoint = start.includes(",")
-                ? start.split(",")[0]
-                : start;
-            const destPoint = destination.includes(",")
-                ? destination.split(",")[0]
-                : destination;
-            if (startPoint && destPoint) {
-                const response = await Axios.get(
-                    `/api/map-destinations/${startPoint}-${destPoint}`
-                );
-                let data = [];
-                data["start"] = response.data[0];
-                data["destination"] = response.data[1];
-                console.log(data);
-                if (additionalStops.length > 0) {
-                    let query = "/api/map-multiple-destinations/";
-                    additionalStops.forEach((stop) => {
-                        const stopPoint = stop.includes(",")
-                            ? stop.split(",")[0]
-                            : stop;
-                        query += stopPoint + "--";
-                    });
-                    query = query.slice(0, query.length - 2);
-                    const queryRes = await Axios.get(query);
-                    console.log(data);
-                    data["additionalStops"] = queryRes.data;
-                    console.log(data);
-                }
-
-                if (response.data != "") changeLocations(data);
-            }
-        }, 500);
-        return delay;
+        changeHotels(response.data["cities"]);
     }
 
     useEffect(() => {
+        function getMapDestinations() {
+            let delay = setTimeout(async () => {
+                const startPoint = start.includes(",")
+                    ? start.split(",")[0]
+                    : start;
+                const destPoint = destination.includes(",")
+                    ? destination.split(",")[0]
+                    : destination;
+                if (startPoint && destPoint) {
+                    const response = await Axios.get(
+                        `/api/map-destinations/${startPoint}-${destPoint}`
+                    );
+                    let data = [];
+                    data["start"] = response.data[0];
+                    data["destination"] = response.data[1];
+                    console.log(data);
+                    if (additionalStops.length > 0) {
+                        let query = "/api/map-multiple-destinations/";
+                        additionalStops.forEach((stop) => {
+                            const stopPoint = stop.includes(",")
+                                ? stop.split(",")[0]
+                                : stop;
+                            query += stopPoint + "--";
+                        });
+                        query = query.slice(0, query.length - 2);
+                        const queryRes = await Axios.get(query);
+                        console.log(data);
+                        data["additionalStops"] = queryRes.data;
+                        console.log(data);
+                    }
+
+                    if (response.data != "") changeLocations(data);
+                }
+            }, 500);
+            return delay;
+        }
+
         let delay = getMapDestinations();
         return () => {
             clearTimeout(delay);
@@ -208,7 +210,13 @@ function TripPlanner(): Node {
             </div>
             <div className="col-md-9 col-12">
                 {hasLocations ? (
-                    <Map locations={locations} transport={transport} />
+                    <Map
+                        locations={locations}
+                        transport={transport}
+                        hotels={hotels}
+                        selectedHotel={selectedHotel}
+                        changeSelectedHotel={changeSelectedHotel}
+                    />
                 ) : (
                     ""
                 )}
