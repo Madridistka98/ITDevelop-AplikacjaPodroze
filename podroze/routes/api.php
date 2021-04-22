@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\HotelsController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes

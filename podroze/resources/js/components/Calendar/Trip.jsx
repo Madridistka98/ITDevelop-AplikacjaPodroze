@@ -34,6 +34,7 @@ function Trip(props: Props): Node {
 
     function getTrips() {
         Axios.get(`/api/trip/${userID}-${apiDate}`).then((res) => {
+            console.log(res.data);
             changeTrip(res.data);
         });
     }

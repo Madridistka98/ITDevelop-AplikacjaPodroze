@@ -14,12 +14,11 @@ class CreateHotelsTable extends Migration
     public function up()
     {
         Schema::create('hotels', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
             $table->timestamps();
-            $table->string('name');
-            $table->decimal('latitude',8,6 );
-            $table->decimal('longitude',9,6 );
-            $table->foreignId("destination_id");
+            $table->string('name')->unique();
+            $table->decimal('latitude');
+            $table->decimal('longitude');
         });
     }
 

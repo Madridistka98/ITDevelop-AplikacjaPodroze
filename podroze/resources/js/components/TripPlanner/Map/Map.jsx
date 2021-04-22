@@ -8,21 +8,37 @@ const platform = new H.service.Platform({
 });
 
 type MapDestination = {
-    city: string,
+    city?: string,
     latitude: number,
     longitude: number,
+    name?: string,
 };
 
-type Props = {
-    locations: Array<MapDestination>,
+type Locations = {
+    start: MapDestination,
+    destination: MapDestination,
     additionalStops: Array<MapDestination>,
+};
+type Point = {
+    lat: number,
+    lng: number,
+};
+type Props = {
+    locations: Locations,
     transport: string,
+    hotels: Array<MapDestination>,
+    selectedHotel: MapDestination,
+    changeSelectedHotel: (MapDestination) => void,
+    changeFocusPoint: (MapDestination) => void,
 };
 
 function Map(props: Props): Node {
-    console.log(props);
     const [hMap, changeMap] = useState({});
     const [routes, changeRoutes] = useState();
+    const { focusPoint, changeFocusPoint } = props;
+    const hotels = props.hotels;
+    const selectedHotel = props.selectedHotel;
+    const changeSelectedHotel = props.changeSelectedHotel;
     const mapContainer = useRef(null);
     const start = props.locations["start"];
     const additionalStops = props.locations["additionalStops"]
@@ -30,16 +46,24 @@ function Map(props: Props): Node {
         : [];
     const destination = props.locations["destination"];
     const transport = props.transport;
-    function handleMapViewChange(e) {
-        if (e.newValue && e.newValue.lookAt && hMap.map) {
-            const lookAt = e.newValue.lookAt;
-            // adjust precision
-            const lat = Math.trunc(lookAt.position.lat * 1e7) / 1e7;
-            const lng = Math.trunc(lookAt.position.lng * 1e7) / 1e7;
-            const zoom = Math.trunc(lookAt.zoom * 1e2) / 1e2;
 
-            hMap.map.setZoom(zoom);
-            hMap.map.setCenter({ lat, lng });
+    function handleMapViewChange(e) {
+        const map = e.target;
+        if (map) {
+            const screenPoint = {
+                x: e.currentPointer.viewportX,
+                y: e.currentPointer.viewportX,
+            };
+            const coord = map.screenToGeo(screenPoint.x, screenPoint.y);
+            console.log(coord);
+            if (map) {
+                // adjust precision
+                const lat = Math.trunc(coord.lat * 1e7) / 1e7;
+                const lng = Math.trunc(coord.lng * 1e7) / 1e7;
+                map.setCenter({ lat, lng });
+                console.log("map change");
+                // changeFocusPoint({ lng: lng, lat: lat });
+            }
         }
     }
 
@@ -107,17 +131,27 @@ function Map(props: Props): Node {
         const layers = platform.createDefaultLayers();
         const map = new H.Map(mapContainer.current, layers.vector.normal.map, {
             pixelRatio: window.devicePixelRatio,
-            center: { lng: start.longitude, lat: start.latitude },
+            center: { lng: 0, lat: 0 },
             zoom: 10,
         });
         onResize(mapContainer.current, () => {
             map.getViewPort().resize();
+            if (hMap.map) {
+                const center = new H.geo.Point(focusPoint.lat, focusPoint.lng);
+                hMap.map.setCenter(center);
+            }
         });
 
-        map.addEventListener("mapviewchange", handleMapViewChange);
-        new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+        const mapEvents = new H.mapevents.MapEvents(map);
+        const behavior = new H.mapevents.Behavior(mapEvents);
+        // map.addEventListener("drag", handleMapViewChange);
 
-        changeMap({ layers: layers, map: map });
+        changeMap({
+            layers: layers,
+            map: map,
+            mapEvents: mapEvents,
+            behavior: behavior,
+        });
         if (!routes) {
             const g = new H.map.Group();
             changeRoutes(g);
@@ -125,10 +159,20 @@ function Map(props: Props): Node {
         }
         // if (hMap.map) makeRoute(hMap.map);
         return () => {
-            map.removeEventListener("mapviewchange", handleMapViewChange);
+            //  map.removeEventListener("drag", handleMapViewChange);
         };
     }, []);
 
+    useEffect(() => {
+        if (hMap.map) {
+            const center = new H.geo.Point(focusPoint.lat, focusPoint.lng);
+            hMap.map.setCenter(center);
+        }
+    }, [focusPoint, start]);
+
+    /**
+    Creates routes from start to destination throught all locations
+     */
     useEffect(() => {
         if (hMap.map) {
             routes.removeAll();
@@ -140,8 +184,82 @@ function Map(props: Props): Node {
             }
         }
     });
+    /**
+        Add hotels markers to map
+     */
+    useEffect(() => {
+        if (hMap.map) {
+            const hotelsGroup = new H.map.Group();
+            hMap.map.addObject(hotelsGroup);
+            for (const city in hotels) {
+                hotels[city].forEach((hotel) => {
+                    if (
+                        selectedHotel.latitude &&
+                        hotel.latitude == selectedHotel.latitude &&
+                        hotel.longitude == selectedHotel.longitude
+                    ) {
+                        const content = document.createElement("div");
+                        content.style.width = "10rem";
+                        content.style.backgroundColor = "black";
+                        const text = document.createElement("h4");
+                        text.style.color = "#fff";
+                        text.innerText = hotel.name;
+                        content.appendChild(text);
+                        const icon = new H.map.DomIcon(content);
+                        const marker = new H.map.DomMarker(
+                            {
+                                lat: hotel.latitude,
+                                lng: hotel.longitude,
+                            },
+                            { icon: icon, zIndex: 1 }
+                        );
+                        hotelsGroup.addObject(marker);
+                    } else {
+                        const markerIcon = `<svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="25"
+                                    height="25"
+                                    fill="currentColor"
+                                    className="bi bi-geo-alt-fill"
+                                    viewBox="0 0 16 16"
+                                >
+                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                                </svg>`;
+                        const markerContent = document.createElement("a");
+                        markerContent.href = "#";
+                        markerContent.innerHTML = markerIcon;
 
-    return <div ref={mapContainer} className="col-md-9 col-12" id="map"></div>;
+                        const icon = new H.map.DomIcon(markerContent);
+                        const marker = new H.map.DomMarker(
+                            {
+                                lat: hotel.latitude,
+                                lng: hotel.longitude,
+                            },
+                            { icon: icon }
+                        );
+
+                        marker.addEventListener("tap", function (e: Event) {
+                            e.preventDefault();
+                            console.log("select");
+                            changeSelectedHotel(hotel);
+                        });
+                        hotelsGroup.addObject(marker);
+                    }
+                });
+            }
+
+            return () => {
+                const markers = hotelsGroup.getObjects();
+                markers.map((marker) => {
+                    marker.dispose();
+                });
+                hotelsGroup.removeAll();
+                hMap.map.removeObject(hotelsGroup);
+            };
+        }
+    });
+
+    return <div ref={mapContainer} className="w-100 h-100" id="map"></div>;
 }
 
 export default Map;

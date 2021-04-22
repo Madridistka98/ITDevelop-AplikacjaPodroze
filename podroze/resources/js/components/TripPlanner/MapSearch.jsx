@@ -35,13 +35,12 @@ function MapSearch(props: Props) {
         let dropDowns = [];
         for (let count = 0; count < numberOfStops; count++) {
             dropDowns.push(
-                <div className="d-flex flex-row">
+                <div className="d-flex flex-row" key={count}>
                     <DropDown
                         point={additionalStops[count] || ""}
                         name={"stopNr:" + count}
                         changePoint={changeAdditionalStops}
                         isGroup={true}
-                        key={count}
                     />
                     <a
                         href="#"
@@ -53,7 +52,6 @@ function MapSearch(props: Props) {
                             changeNumberOfStops((stops) => stops - 1);
                             changeAdditionalStops([...temp]);
                         }}
-                        key={"R" + count}
                     >
                         X
                     </a>

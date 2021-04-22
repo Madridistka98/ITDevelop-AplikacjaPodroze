@@ -19,8 +19,8 @@ class CreateTrip extends Migration
             $table->string("name", 100)->nullable();
             $table->string("transport", 100);
             $table->date("trip_date");
-            $table->foreignId("start_id");
-            $table->foreignId("destination_id");
+            //$table->foreignId("start_id");
+            //$table->foreignId("destination_id");
             $table->foreignId("user_id");
         });
 
@@ -28,6 +28,7 @@ class CreateTrip extends Migration
             $table->id();
             $table->foreignId("trip_id");
             $table->foreignId("destination_id");
+            $table->string("hotel_name")->nullable();
             $table->integer("sort_order");
         });
     }
