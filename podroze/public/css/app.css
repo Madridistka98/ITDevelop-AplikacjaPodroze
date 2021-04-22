@@ -11128,3 +11128,7 @@ footer,
   transform: rotate(90deg);
 }
 
+#map-container {
+  padding: 0;
+}
+

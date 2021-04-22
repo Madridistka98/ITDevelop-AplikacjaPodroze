@@ -9,8 +9,7 @@ class Hotel extends Model
 {
     use HasFactory;
 
-    public function destination()
-    {
-        return $this->belongsTo(Trip::class);
-    }
+    protected $primaryKey = 'name';
+    public $incrementing = false;
+    protected $keyType = 'string';
 }
