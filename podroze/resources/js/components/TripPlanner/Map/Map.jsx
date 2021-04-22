@@ -19,17 +19,23 @@ type Locations = {
     destination: MapDestination,
     additionalStops: Array<MapDestination>,
 };
+type Point = {
+    lat: number,
+    lng: number,
+};
 type Props = {
     locations: Locations,
     transport: string,
     hotels: Array<MapDestination>,
     selectedHotel: MapDestination,
     changeSelectedHotel: (MapDestination) => void,
+    changeFocusPoint: (MapDestination) => void,
 };
 
 function Map(props: Props): Node {
     const [hMap, changeMap] = useState({});
     const [routes, changeRoutes] = useState();
+    const { focusPoint, changeFocusPoint } = props;
     const hotels = props.hotels;
     const selectedHotel = props.selectedHotel;
     const changeSelectedHotel = props.changeSelectedHotel;
@@ -40,16 +46,24 @@ function Map(props: Props): Node {
         : [];
     const destination = props.locations["destination"];
     const transport = props.transport;
-    function handleMapViewChange(e) {
-        if (e.newValue && e.newValue.lookAt && hMap.map) {
-            const lookAt = e.newValue.lookAt;
-            // adjust precision
-            const lat = Math.trunc(lookAt.position.lat * 1e7) / 1e7;
-            const lng = Math.trunc(lookAt.position.lng * 1e7) / 1e7;
-            const zoom = Math.trunc(lookAt.zoom * 1e2) / 1e2;
 
-            hMap.map.setZoom(zoom);
-            hMap.map.setCenter({ lat, lng });
+    function handleMapViewChange(e) {
+        const map = e.target;
+        if (map) {
+            const screenPoint = {
+                x: e.currentPointer.viewportX,
+                y: e.currentPointer.viewportX,
+            };
+            const coord = map.screenToGeo(screenPoint.x, screenPoint.y);
+            console.log(coord);
+            if (map) {
+                // adjust precision
+                const lat = Math.trunc(coord.lat * 1e7) / 1e7;
+                const lng = Math.trunc(coord.lng * 1e7) / 1e7;
+                map.setCenter({ lat, lng });
+                console.log("map change");
+                // changeFocusPoint({ lng: lng, lat: lat });
+            }
         }
     }
 
@@ -117,16 +131,20 @@ function Map(props: Props): Node {
         const layers = platform.createDefaultLayers();
         const map = new H.Map(mapContainer.current, layers.vector.normal.map, {
             pixelRatio: window.devicePixelRatio,
-            center: { lng: start.longitude, lat: start.latitude },
+            center: { lng: 0, lat: 0 },
             zoom: 10,
         });
         onResize(mapContainer.current, () => {
             map.getViewPort().resize();
+            if (hMap.map) {
+                const center = new H.geo.Point(focusPoint.lat, focusPoint.lng);
+                hMap.map.setCenter(center);
+            }
         });
 
-        map.addEventListener("mapviewchange", handleMapViewChange);
         const mapEvents = new H.mapevents.MapEvents(map);
         const behavior = new H.mapevents.Behavior(mapEvents);
+        // map.addEventListener("drag", handleMapViewChange);
 
         changeMap({
             layers: layers,
@@ -141,9 +159,16 @@ function Map(props: Props): Node {
         }
         // if (hMap.map) makeRoute(hMap.map);
         return () => {
-            map.removeEventListener("mapviewchange", handleMapViewChange);
+            //  map.removeEventListener("drag", handleMapViewChange);
         };
     }, []);
+
+    useEffect(() => {
+        if (hMap.map) {
+            const center = new H.geo.Point(focusPoint.lat, focusPoint.lng);
+            hMap.map.setCenter(center);
+        }
+    }, [focusPoint, start]);
 
     /**
     Creates routes from start to destination throught all locations
@@ -186,7 +211,7 @@ function Map(props: Props): Node {
                                 lat: hotel.latitude,
                                 lng: hotel.longitude,
                             },
-                            { icon: icon }
+                            { icon: icon, zIndex: 1 }
                         );
                         hotelsGroup.addObject(marker);
                     } else {

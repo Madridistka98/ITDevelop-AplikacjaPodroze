@@ -8,8 +8,10 @@ import MapSearch from "./MapSearch";
 // @flow
 const parsed = queryString.parse(location.search);
 function TripPlanner(): Node {
+    const [showHotels, changeShowHotels] = useState(false);
     const [start, changeStart] = useState(parsed.start);
     const [destination, changeDestination] = useState(parsed.destination);
+
     const initialTransport = parsed.transport;
     const [transport, changeTransport] = useState(
         initialTransport ? initialTransport : "car"
@@ -27,7 +29,10 @@ function TripPlanner(): Node {
         locations: Array<MapDestination>,
         changeLocations: (Array<MapDestination>) => void,
     ] = useState();
-
+    const [focusPoint, changeFocusPoint] = useState({
+        lng: 0,
+        lat: 0,
+    });
     const [hotels, changeHotels] = useState([]);
     const [selectedHotel, changeSelectedHotel] = useState({});
     const calendar =
@@ -87,19 +92,41 @@ function TripPlanner(): Node {
                 "Error when adding trip";
             });
     }
-
-    async function getHotels() {
-        let query = "/api/hotels/";
-        query += locations.start.city;
-        if (locations.additionalStops) {
-            locations.additionalStops.forEach((loc) => {
-                query += "--" + loc.city;
+    useEffect(() => {
+        if (selectedHotel) {
+            changeFocusPoint({
+                lng: selectedHotel.longitude,
+                lat: selectedHotel.latitude,
             });
         }
-        query += "--" + locations.destination.city;
-        const response = await Axios.get(query);
-        changeHotels(response.data["cities"]);
-    }
+    }, [selectedHotel]);
+
+    useEffect(() => {
+        async function getHotels() {
+            if (
+                typeof locations.start == "undefined" ||
+                typeof locations.destination == "undefined"
+            ) {
+                changeShowHotels(false);
+                return;
+            }
+            let query = "/api/hotels/";
+            query += locations.start.city;
+            if (locations.additionalStops) {
+                locations.additionalStops.forEach((loc) => {
+                    query += "--" + loc.city;
+                });
+            }
+            query += "--" + locations.destination.city;
+            const response = await Axios.get(query);
+            changeHotels(response.data["cities"]);
+        }
+        if (showHotels) {
+            getHotels();
+        } else {
+            changeHotels([]);
+        }
+    }, [showHotels, locations]);
 
     useEffect(() => {
         function getMapDestinations() {
@@ -129,7 +156,10 @@ function TripPlanner(): Node {
                         const queryRes = await Axios.get(query);
                         data["additionalStops"] = queryRes.data;
                     }
-
+                    changeFocusPoint({
+                        lng: data.start.longitude,
+                        lat: data.start.latitude,
+                    });
                     if (response.data != "") changeLocations(data);
                 }
             }, 500);
@@ -137,6 +167,7 @@ function TripPlanner(): Node {
         }
 
         let delay = getMapDestinations();
+
         return () => {
             clearTimeout(delay);
         };
@@ -151,7 +182,7 @@ function TripPlanner(): Node {
                         icon="./static/images/icons/bed_1.png"
                         name="bed"
                         effect={function () {
-                            getHotels();
+                            changeShowHotels(showHotels ? false : true);
                         }}
                     />
                     <Button
@@ -208,7 +239,7 @@ function TripPlanner(): Node {
             <div id="map-container" className="col-md-9 col-12">
                 {hasLocations ? (
                     <>
-                        {Object.keys(hotels).length > 0 ? (
+                        {showHotels && Object.keys(hotels).length > 0 ? (
                             <Slider
                                 objects={hotels}
                                 changeSelected={changeSelectedHotel}
@@ -220,6 +251,8 @@ function TripPlanner(): Node {
                             hotels={hotels}
                             selectedHotel={selectedHotel}
                             changeSelectedHotel={changeSelectedHotel}
+                            focusPoint={focusPoint}
+                            changeFocusPoint={changeFocusPoint}
                         />
                     </>
                 ) : (
