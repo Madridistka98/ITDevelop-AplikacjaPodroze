@@ -14,10 +14,6 @@ class HotelsController extends Controller
         $cities = explode("--", $cities);
 
         $destinations = Destination::select('city')->whereIn("city", $cities)->get();
-
-        // $citiesNames = array_map(function ($item) {
-        //     return $item['name'];
-        // }, $destinations);
         $hotels = [];
         foreach ($destinations as $dest) {
             $city = $dest->city;

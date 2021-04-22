@@ -17,7 +17,11 @@
     font-family: "Roboto";
 }
 
-nav, footer, .destination, .destinations, .main h2 {
+nav,
+footer,
+.destination,
+.destinations,
+.main h2 {
     font-family: "Sansation";
 }
 
@@ -33,3 +37,6 @@ nav, footer, .destination, .destinations, .main h2 {
     transform: rotate(90deg);
 }
 
+#map-container {
+    padding: 0;
+}

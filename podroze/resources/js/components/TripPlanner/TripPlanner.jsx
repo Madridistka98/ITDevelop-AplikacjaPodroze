@@ -1,5 +1,6 @@
 import React, { useState, useEffect, type Node } from "react";
 import Map, { type MapDestination } from "./Map/Map";
+import Slider from "./Map/Slider";
 import Axios from "axios";
 import queryString from "query-string";
 import Button from "./Button";
@@ -116,7 +117,6 @@ function TripPlanner(): Node {
                     let data = [];
                     data["start"] = response.data[0];
                     data["destination"] = response.data[1];
-                    console.log(data);
                     if (additionalStops.length > 0) {
                         let query = "/api/map-multiple-destinations/";
                         additionalStops.forEach((stop) => {
@@ -127,9 +127,7 @@ function TripPlanner(): Node {
                         });
                         query = query.slice(0, query.length - 2);
                         const queryRes = await Axios.get(query);
-                        console.log(data);
                         data["additionalStops"] = queryRes.data;
-                        console.log(data);
                     }
 
                     if (response.data != "") changeLocations(data);
@@ -145,7 +143,6 @@ function TripPlanner(): Node {
     }, [start, destination, additionalStops]);
 
     let hasLocations = typeof locations != "undefined" ? true : false;
-
     return (
         <div className="row flex-grow-1">
             <div className="d-flex flex-column col-md-3 col-12 bg-dark ">
@@ -208,15 +205,23 @@ function TripPlanner(): Node {
 
                 {calendar}
             </div>
-            <div className="col-md-9 col-12">
+            <div id="map-container" className="col-md-9 col-12">
                 {hasLocations ? (
-                    <Map
-                        locations={locations}
-                        transport={transport}
-                        hotels={hotels}
-                        selectedHotel={selectedHotel}
-                        changeSelectedHotel={changeSelectedHotel}
-                    />
+                    <>
+                        {Object.keys(hotels).length > 0 ? (
+                            <Slider
+                                objects={hotels}
+                                changeSelected={changeSelectedHotel}
+                            />
+                        ) : null}
+                        <Map
+                            locations={locations}
+                            transport={transport}
+                            hotels={hotels}
+                            selectedHotel={selectedHotel}
+                            changeSelectedHotel={changeSelectedHotel}
+                        />
+                    </>
                 ) : (
                     ""
                 )}
