@@ -33,11 +33,11 @@ function Slider(props: Props): Node {
             counter++, i++
         ) {
             const slide = (
-                <div key={i} className="slide bg-secondary flex-grow-1 p-3 m-3">
+                <div key={i} className="slide bg-secondary flex-grow-1 p-3 m-3 d-flex">
                     <img
                         src={items[i].image}
                         alt="image"
-                        className="img img-fluid"
+                        className="img img-fluid w-75 h-75 mr-2"
                     />
                     <a
                         href="#"
@@ -88,7 +88,7 @@ function Slider(props: Props): Node {
                 </button>
             </div>
             <div className="slides-container flex-grow-1 d-flex flex-row justify-content-around p-2 m-2">
-                {showSlides()}
+                { items.length > 0 ? showSlides() : ""}
             </div>
             <div className="arrow right-arrow">
                 <button className="bg-dark" onClick={() => changeClickIndex(1)}>
