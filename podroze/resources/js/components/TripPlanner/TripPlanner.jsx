@@ -117,7 +117,7 @@ function TripPlanner(): Node {
                 return;
             }
             let query = "/api/hotels/";
-            query += locations.start.city + locations.start.city;
+            query += locations.start.city;
             if (locations.additionalStops) {
                 locations.additionalStops.forEach((loc) => {
                     query += "--" + loc.city;

@@ -199,8 +199,13 @@ function Map(props: Props): Node {
                         hotel.longitude == selectedHotel.longitude
                     ) {
                         const content = document.createElement("div");
+                        content.classList.add("d-flex",  "flex-column")
                         content.style.width = "10rem";
                         content.style.backgroundColor = "black";
+                        const image = document.createElement("img");
+                        image.src = hotel.image;
+                        image.classList.add("img",  "img-fluid", "w-50", "h-50", "mb-1", "mx-auto");
+                        content.appendChild(image);
                         const text = document.createElement("h4");
                         text.style.color = "#fff";
                         text.innerText = hotel.name;
