@@ -9,8 +9,14 @@ import MapSearch from "./MapSearch";
 const parsed = queryString.parse(location.search);
 function TripPlanner(): Node {
     const [showHotels, changeShowHotels] = useState(false);
-    const [start, changeStart] = useState(parsed.start);
-    const [destination, changeDestination] = useState(parsed.destination);
+    const [start, changeStart] = useState({
+        value: parsed.start,
+        id: parsed.start_id,
+    });
+    const [destination, changeDestination] = useState({
+        value: parsed.destination,
+        id: parsed.destination_id,
+    });
 
     const initialTransport = parsed.transport;
     const [transport, changeTransport] = useState(
@@ -111,7 +117,7 @@ function TripPlanner(): Node {
                 return;
             }
             let query = "/api/hotels/";
-            query += locations.start.city;
+            query += locations.start.city + locations.start.city;
             if (locations.additionalStops) {
                 locations.additionalStops.forEach((loc) => {
                     query += "--" + loc.city;
@@ -119,6 +125,7 @@ function TripPlanner(): Node {
             }
             query += "--" + locations.destination.city;
             const response = await Axios.get(query);
+            console.log(response.data["cities"]);
             changeHotels(response.data["cities"]);
         }
         if (showHotels) {
@@ -131,12 +138,8 @@ function TripPlanner(): Node {
     useEffect(() => {
         function getMapDestinations() {
             let delay = setTimeout(async () => {
-                const startPoint = start.includes(",")
-                    ? start.split(",")[0]
-                    : start;
-                const destPoint = destination.includes(",")
-                    ? destination.split(",")[0]
-                    : destination;
+                const startPoint = start.id;
+                const destPoint = destination.id;
                 if (startPoint && destPoint) {
                     const response = await Axios.get(
                         `/api/map-destinations/${startPoint}-${destPoint}`
@@ -147,9 +150,7 @@ function TripPlanner(): Node {
                     if (additionalStops.length > 0) {
                         let query = "/api/map-multiple-destinations/";
                         additionalStops.forEach((stop) => {
-                            const stopPoint = stop.includes(",")
-                                ? stop.split(",")[0]
-                                : stop;
+                            const stopPoint = stop.id;
                             query += stopPoint + "--";
                         });
                         query = query.slice(0, query.length - 2);

@@ -28,6 +28,7 @@ function TripSearch(): Node {
             className="m-4 p-3 form-row"
             data-tests="trip-search"
         >
+            <input type="hidden" name="start_id" value={start.id} />
             <DropDown name="start" point={start} changePoint={changeStart} />
 
             <a
@@ -55,6 +56,7 @@ function TripSearch(): Node {
                 point={destination}
                 changePoint={changeDestination}
             />
+            <input type="hidden" name="destination_id" value={destination.id} />
             <div className="col-12 col-lg-3">
                 <DatePicker
                     onChange={changeDate}

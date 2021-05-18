@@ -34,6 +34,11 @@ function Slider(props: Props): Node {
         ) {
             const slide = (
                 <div key={i} className="slide bg-secondary flex-grow-1 p-3 m-3">
+                    <img
+                        src={items[i].image}
+                        alt="image"
+                        className="img img-fluid"
+                    />
                     <a
                         href="#"
                         onClick={() => {
