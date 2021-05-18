@@ -40,3 +40,8 @@ footer,
 #map-container {
     padding: 0;
 }
+
+.dropdown-menu {
+    overflow-y: scroll;
+    max-height: 50vh;
+}
