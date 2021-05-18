@@ -3,10 +3,16 @@ import React, { useState, useEffect, type Node } from "react";
 import Axios from "axios";
 
 export type Props = {
-    point: string,
+    point: Point,
     name: string,
+    id: number,
     isGroup?: boolean,
-    changePoint: ((string | Array<string>) => string | Array<string>) => void,
+    changePoint: ((Point | Array<Point>) => Point | Array<Point>) => void,
+};
+
+type Point = {
+    id: number,
+    value: string,
 };
 
 type Destination = {
@@ -17,7 +23,9 @@ type Destination = {
 
 function DropDown(props: Props): Node {
     const { point, name, changePoint, isGroup = false } = props;
-    const [localPoint, changeLocalPoint] = useState(point);
+    const [localPoint: Point | Array<Point>, changeLocalPoint] = useState(
+        point
+    );
     const [
         points: Array<Destination>,
         changePoints: (Array<Destination>) => void,
@@ -30,16 +38,25 @@ function DropDown(props: Props): Node {
             className="form-control"
             placeholder={name}
             name={name}
-            value={localPoint}
+            value={localPoint.value}
+            data-id={localPoint.id}
             autoComplete="off"
             onChange={(e) => {
                 changeLocalPoint((state) => {
                     if (Array.isArray(state)) {
                         const key = parseInt(name.split(":")[1]);
                         const temp = state;
-                        temp[key] = e.target.value;
+                        temp[key] = {
+                            value: e.target.value,
+                            id: e.target.dataset.destid,
+                        };
+                        temp[key];
                         return [...temp];
-                    } else return e.target.value;
+                    } else
+                        return {
+                            value: e.target.value,
+                            id: e.target.dataset.destid,
+                        };
                 });
             }}
         />
@@ -51,12 +68,21 @@ function DropDown(props: Props): Node {
             if (Array.isArray(state)) {
                 const key = parseInt(name.split(":")[1]);
                 const temp = state;
-                temp[key] = e.target.text;
+                temp[key] = {
+                    value: e.target.text,
+                    id: e.target.dataset.destid,
+                };
                 changeLocalPoint([...temp]);
                 return [...temp];
             } else {
-                changeLocalPoint(e.target.text);
-                return e.target.text;
+                changeLocalPoint({
+                    value: e.target.text,
+                    id: e.target.dataset.destid,
+                });
+                return {
+                    value: e.target.text,
+                    id: e.target.dataset.destid,
+                };
             }
         });
     }
@@ -68,6 +94,7 @@ function DropDown(props: Props): Node {
                     return (
                         <a
                             key={point.ID}
+                            data-destid={point.ID}
                             className="dropdown-item"
                             href="#"
                             onClick={selectPoint}
@@ -85,7 +112,8 @@ function DropDown(props: Props): Node {
                 className="form-control"
                 placeholder={name}
                 name={name}
-                value={localPoint}
+                value={localPoint.value}
+                data-id={localPoint.id}
                 autoComplete="off"
                 aria-haspopup="true"
                 aria-expanded="false"
@@ -95,9 +123,17 @@ function DropDown(props: Props): Node {
                         if (Array.isArray(state)) {
                             const key = parseInt(name.split(":")[1]);
                             const temp = state;
-                            temp[key] = e.target.value;
+                            temp[key] = {
+                                value: e.target.value,
+                                id: e.target.dataset.destid,
+                            };
+                            temp[key];
                             return [...temp];
-                        } else return e.target.value;
+                        } else
+                            return {
+                                value: e.target.value,
+                                id: e.target.dataset.destid,
+                            };
                     });
                 }}
             />
@@ -106,7 +142,9 @@ function DropDown(props: Props): Node {
 
     function changeDestinations() {
         let delay = setTimeout(async () => {
-            const response = await Axios.get(`/api/destinations/${localPoint}`);
+            const response = await Axios.get(
+                `/api/destinations/${localPoint.value}`
+            );
             changePoints(response.data);
         }, 500);
         return delay;
@@ -117,7 +155,7 @@ function DropDown(props: Props): Node {
             typeof localPoint == "undefined" ||
             localPoint.length == 0 ||
             (points.length == 1 &&
-                localPoint == points[0].city + ", " + points[0].country)
+                localPoint.value == points[0].city + ", " + points[0].country)
         ) {
             changePoints([]);
             return;

@@ -14,7 +14,7 @@ class HotelSeeder extends Seeder
      */
     public function run()
     {
-       DB::table('hotels')->insert([
+        DB::table('hotels')->insert([
             'name'=>'Hotel',
             'created_at'=>date('Y-m-d H:i:s'),
             'updated_at'=>date('Y-m-d H:i:s'),
