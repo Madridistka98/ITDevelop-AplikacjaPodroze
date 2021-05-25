@@ -73,7 +73,14 @@ class HotelsController extends Controller
         if (!$response->ok()) {
             throw new \Exception("Unable to get hotel picture: $id");
         }
-        Storage::disk('public')->put("$id.jpg", file_get_contents($response[0]['mainUrl']));
+
+        $arrContextOptions=array(
+            "ssl"=>array(
+                "verify_peer"=>false,
+                "verify_peer_name"=>false,
+            ),
+        );  
+        Storage::disk('public')->put("$id.jpg", file_get_contents($response[0]['mainUrl'], false, stream_context_create($arrContextOptions)));
         return "storage/$id.jpg";
     }
 }
