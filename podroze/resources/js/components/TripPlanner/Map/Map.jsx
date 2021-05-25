@@ -47,25 +47,23 @@ function Map(props: Props): Node {
     const destination = props.locations["destination"];
     const transport = props.transport;
 
-    function handleMapViewChange(e) {
-        const map = e.target;
-        if (map) {
-            const screenPoint = {
-                x: e.currentPointer.viewportX,
-                y: e.currentPointer.viewportX,
-            };
-            const coord = map.screenToGeo(screenPoint.x, screenPoint.y);
-            console.log(coord);
-            if (map) {
-                // adjust precision
-                const lat = Math.trunc(coord.lat * 1e7) / 1e7;
-                const lng = Math.trunc(coord.lng * 1e7) / 1e7;
-                map.setCenter({ lat, lng });
-                console.log("map change");
-                // changeFocusPoint({ lng: lng, lat: lat });
-            }
-        }
-    }
+    // function handleMapViewChange(e) {
+    //     const map = e.target;
+    //     if (map) {
+    //         const screenPoint = {
+    //             x: e.currentPointer.viewportX,
+    //             y: e.currentPointer.viewportX,
+    //         };
+    //         const coord = map.screenToGeo(screenPoint.x, screenPoint.y);
+    //         if (map) {
+    //             // adjust precision
+    //             const lat = Math.trunc(coord.lat * 1e7) / 1e7;
+    //             const lng = Math.trunc(coord.lng * 1e7) / 1e7;
+    //             map.setCenter({ lat, lng });
+    //             // changeFocusPoint({ lng: lng, lat: lat });
+    //         }
+    //     }
+    // }
 
     function makeRoute(map, start, destination) {
         const routingParameters = {
@@ -109,9 +107,9 @@ function Map(props: Props): Node {
                     routes.addObjects([routeLine, startMarker, endMarker]);
 
                     //Set the map's viewport to make the whole route visible:
-                    map.getViewModel().setLookAtData({
-                        bounds: routeLine.getBoundingBox(),
-                    });
+                    // map.getViewModel().setLookAtData({
+                    //     bounds: routeLine.getBoundingBox(),
+                    // });
                 });
             }
         };
@@ -131,7 +129,7 @@ function Map(props: Props): Node {
         const layers = platform.createDefaultLayers();
         const map = new H.Map(mapContainer.current, layers.vector.normal.map, {
             pixelRatio: window.devicePixelRatio,
-            center: { lng: 0, lat: 0 },
+            center: { lng: focusPoint.lng, lat: focusPoint.lat },
             zoom: 10,
         });
         onResize(mapContainer.current, () => {
@@ -204,10 +202,10 @@ function Map(props: Props): Node {
                         content.style.backgroundColor = "black";
                         const image = document.createElement("img");
                         image.src = hotel.image;
-                        image.classList.add("img",  "img-fluid", "w-50", "h-50", "mb-1", "mx-auto");
+                        image.classList.add("img",  "img-fluid", "w-75", "h-50", "my-3", "mx-auto");
                         content.appendChild(image);
                         const text = document.createElement("h4");
-                        text.style.color = "#fff";
+                        text.classList.add("h4",  "text-center", "fw-bold", "text-secondary")
                         text.innerText = hotel.name;
                         content.appendChild(text);
                         const icon = new H.map.DomIcon(content);

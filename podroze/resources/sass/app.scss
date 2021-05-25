@@ -39,6 +39,13 @@ footer,
 
 #map-container {
     padding: 0;
+    position: relative;
+}
+
+#slider {
+    max-height: 30vh;
+    position: absolute;
+    z-index: 999;
 }
 
 .dropdown-menu {
