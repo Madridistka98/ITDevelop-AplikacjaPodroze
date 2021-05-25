@@ -37,7 +37,7 @@ function Slider(props: Props): Node {
                     <img
                         src={items[i].image}
                         alt="image"
-                        className="img img-fluid w-75 h-75 mr-2"
+                        className="img img-fluid w-50 h-75 mr-2"
                     />
                     <a
                         href="#"
